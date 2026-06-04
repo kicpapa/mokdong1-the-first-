@@ -536,6 +536,11 @@ function toAuthEmail(idOrEmail){
   const v=String(idOrEmail||"").trim();
   return v.includes("@") ? v : `${v}@${EMAIL_DOMAIN}`;
 }
+// 화면 표시용 아이디: 이메일이면 @ 앞부분만, 가짜 도메인도 앞부분만
+function displayId(loginId){
+  const v=String(loginId||"");
+  return v.includes("@") ? v.split("@")[0] : v;
+}
 
 /* =========================================================
    공통 유틸
@@ -1098,7 +1103,7 @@ function resetForm(m){
   // 작성자: 로그인 계정 자동 (이름 · 아이디 · 직책)
   const cu=currentUser();
   const drEl=document.getElementById(`${m.key}-drafter`);
-  if(drEl) drEl.value = cu ? `${cu.name} (${cu.login_id} · ${cu.role})` : "";
+  if(drEl) drEl.value = cu ? `${cu.name} (${displayId(cu.login_id)} · ${cu.role})` : "";
   document.getElementById(`${m.key}-items`).innerHTML="";
   // 예산 라인 초기화 (1줄)
   const bl=document.getElementById(`${m.key}-budget-lines`); if(bl){ bl.innerHTML=""; addBudgetLine(m); }
@@ -2003,7 +2008,7 @@ function fillDraftCompose(draftNo){
   setv("draft-draft-no", draftNo);
   setv("draft-title", dr.title||"");
   setv("draft-project", dr.project||"목동1단지");
-  setv("draft-drafter", (function(){ const cu=currentUser(); return cu?`${cu.name} (${cu.login_id} · ${cu.role})`:(dr.drafter||""); })());
+  setv("draft-drafter", (function(){ const cu=currentUser(); return cu?`${cu.name} (${displayId(cu.login_id)} · ${cu.role})`:(dr.drafter||""); })());
   // 예산 라인 초기화 (구매요청에서 넘어온 기안도 빈 1줄로 시작)
   const bl=document.getElementById("draft-budget-lines"); if(bl){ bl.innerHTML=""; addBudgetLine(MODULES.draft); }
   // 폼 제목 + 요약 박스
@@ -4997,7 +5002,7 @@ function accountSectionHtml(){
       <h2>내 계정</h2>
       <dl class="kv">
         <dt>이름</dt><dd>${esc(u.name)}</dd>
-        <dt>아이디</dt><dd>${esc(u.login_id)}</dd>
+        <dt>아이디</dt><dd>${esc(displayId(u.login_id))}</dd>
         <dt>직책</dt><dd>${esc(u.role)}</dd>
         <dt>생년월일</dt><dd>${esc(u.birth)}</dd>
         <dt>상태</dt><dd><span class="pill b-approve">활성</span></dd>
@@ -5020,7 +5025,7 @@ function accountSectionHtml(){
   const pending=accounts.filter(a=>a.status==="승인대기");
   const active=accounts.filter(a=>a.status==="활성");
   const row=a=>`<tr>
-      <td>${esc(a.name)}</td><td>${esc(a.login_id)}</td><td>${esc(a.birth)}</td>
+      <td>${esc(a.name)}</td><td>${esc(displayId(a.login_id))}</td><td>${esc(a.birth)}</td>
       <td>${esc(a.role)}</td>
       <td>${a.status==="활성"?'<span class="pill b-approve">활성</span>':'<span class="pill b-wait" style="background:var(--wait-soft);color:var(--wait)">승인대기</span>'}</td>
       <td>${accountActionBtns(a)}</td></tr>`;
@@ -5157,7 +5162,7 @@ function wireAccountSection(){
     await afterAuthChange(); toast(`${r.user.name}님 로그인`);
   };
 
-  // 가입 신청
+  // 가입 신청 (Supabase Auth + app_accounts)
   const suGo=sec.querySelector("#su-go");
   if(suGo) suGo.onclick=async()=>{
     const name=sec.querySelector("#su-name").value.trim();
@@ -5166,19 +5171,29 @@ function wireAccountSection(){
     const birth=sec.querySelector("#su-birth").value.trim();
     const role=sec.querySelector("#su-role").value;
     if(!name||!id||!pw||!birth){ toast("모든 항목을 입력하세요"); return; }
-    if(findAccount(id)){ toast("이미 사용 중인 아이디입니다"); return; }
-    const accounts=loadAccounts();
-    if(role==="HTML마스터"){
-      if(masterExists() || accounts.some(a=>a.role==="HTML마스터")){ toast("HTML마스터는 1개만 만들 수 있습니다"); return; }
-      // 첫 마스터는 즉시 활성
-      accounts.push({name,login_id:id,pw_hash:await sha256(pw),birth,role:"HTML마스터",status:"활성",created_at:todayStr()});
-      saveAccounts(accounts);
-      localStorage.setItem(SESSION_KEY,id);
-      afterAuthChange(); toast("HTML마스터 계정이 생성되어 로그인되었습니다");
-      return;
+    if(pw.length<6){ toast("비밀번호는 6자 이상이어야 합니다"); return; }
+    const email=toAuthEmail(id);
+    const wantMaster = role==="HTML마스터";
+    if(wantMaster && (_cache.accounts||[]).some(a=>a.role==="HTML마스터")){ toast("HTML마스터는 1개만 만들 수 있습니다"); return; }
+    suGo.disabled=true; suGo.textContent="신청 중…";
+    // 1) Auth 가입
+    const { data: sd, error: se } = await sb.auth.signUp({ email, password: pw });
+    if(se){ suGo.disabled=false; suGo.textContent="계정 신청"; toast("가입 실패: "+(se.message||"이미 등록된 이메일일 수 있습니다")); return; }
+    const uid = sd.user ? sd.user.id : null;
+    // 2) app_accounts insert
+    const { error: ie } = await sb.from("app_accounts").insert([{
+      login_id:id, name, role: wantMaster?"HTML마스터":role, birth,
+      status: wantMaster?"활성":"승인대기", auth_uid:uid
+    }]);
+    suGo.disabled=false; suGo.textContent="계정 신청";
+    if(ie){ console.error(ie); toast("계정 정보 저장 실패: "+(ie.message||"")); return; }
+    if(wantMaster){
+      const r=await sbLogin(id, pw);
+      if(r.ok){ await afterAuthChange(); toast("HTML마스터 계정이 생성되어 로그인되었습니다"); return; }
     }
-    accounts.push({name,login_id:id,pw_hash:await sha256(pw),birth,role,status:"승인대기",created_at:todayStr()});
-    saveAccounts(accounts);
+    // 입력칸 초기화
+    ["su-name","su-id","su-pw","su-birth"].forEach(x=>{ const el=sec.querySelector("#"+x); if(el) el.value=""; });
+    await loadAllFromSupabase();
     toast("계정 신청 완료. 마스터 승인 후 로그인 가능합니다.");
     showTop("account");
   };
@@ -5192,15 +5207,22 @@ function wireAccountSection(){
       const id=ap.dataset.approveAcc;
       const roleSel=sec.querySelector(`.acct-role[data-id="${cssEsc(id)}"]`);
       const role=roleSel?roleSel.value:null;
-      const accounts=loadAccounts(); const a=accounts.find(x=>x.login_id===id);
-      if(a){ a.status="활성"; if(role) a.role=role; saveAccounts(accounts); showTop("account"); toast(`${a.name} 승인 · ${a.role}`); }
+      (async()=>{
+        const upd={ status:"활성" }; if(role) upd.role=role;
+        const { error }=await sb.from("app_accounts").update(upd).eq("login_id",id);
+        if(error){ console.error(error); toast("승인 실패: "+(error.message||"")); return; }
+        await loadAllFromSupabase(); showTop("account"); toast(`${id} 승인 완료`);
+      })();
     }else if(ed){
       openAccountEdit(ed.dataset.editAcc);
     }else if(dl){
       const id=dl.dataset.delAcc;
-      if(!confirm("이 계정을 삭제할까요?")) return;
-      saveAccounts(loadAccounts().filter(x=>x.login_id!==id));
-      showTop("account"); toast("삭제되었습니다");
+      if(!confirm("이 계정을 삭제할까요? (로그인 목록에서 제거됩니다)")) return;
+      (async()=>{
+        const { error }=await sb.from("app_accounts").delete().eq("login_id",id);
+        if(error){ console.error(error); toast("삭제 실패: "+(error.message||"")); return; }
+        await loadAllFromSupabase(); showTop("account"); toast("삭제되었습니다");
+      })();
     }
   };
 }
@@ -5218,15 +5240,14 @@ function openAccountEdit(loginId){
     <h2>계정 수정 — ${esc(a.name)}</h2>
     <div class="row">
       <div class="field"><label class="req">이름</label><input type="text" id="ed-name" value="${esc(a.name)}"></div>
-      <div class="field"><label class="req">아이디</label><input type="text" id="ed-id" value="${esc(a.login_id)}"></div>
+      <div class="field"><label>아이디 (변경 불가)</label><input type="text" id="ed-id" value="${esc(displayId(a.login_id))}" disabled style="background:#f0f0f0;color:var(--ink-soft)"></div>
     </div>
     <div class="row">
       <div class="field"><label class="req">생년월일</label><input type="text" id="ed-birth" value="${esc(a.birth)}" placeholder="예: 1980-03-15"></div>
       <div class="field"><label class="req">직책</label>
         <select id="ed-role">${ROLES.filter(r=>r!=="HTML마스터").map(r=>`<option value="${r}"${r===a.role?" selected":""}>${r}</option>`).join("")}</select></div>
     </div>
-    <div class="hint" style="margin-bottom:14px">비밀번호 변경은 별도 항목입니다. 비워두면 기존 비밀번호가 유지됩니다.</div>
-    <div class="field"><label>새 비밀번호 (선택)</label><input type="password" id="ed-pw" placeholder="변경할 때만 입력"></div>
+    <div class="hint" style="margin-bottom:14px">아이디(로그인 이메일)는 변경할 수 없습니다. 비밀번호는 각자 '내 계정 → 비밀번호 변경'에서 바꿉니다.</div>
     <div class="actions">
       <button class="btn btn-primary" id="ed-save">저장</button>
       <button class="btn btn-ghost" id="ed-cancel">취소</button>
@@ -5236,20 +5257,15 @@ function openAccountEdit(loginId){
   card.querySelector("#ed-cancel").onclick=()=>card.remove();
   card.querySelector("#ed-save").onclick=async()=>{
     const name=card.querySelector("#ed-name").value.trim();
-    const newId=card.querySelector("#ed-id").value.trim();
     const birth=card.querySelector("#ed-birth").value.trim();
     const role=card.querySelector("#ed-role").value;
-    const newPw=card.querySelector("#ed-pw").value;
-    if(!name||!newId||!birth){ toast("이름·아이디·생년월일은 필수입니다"); return; }
-    const accounts=loadAccounts();
-    // 아이디 중복 검사 (자기 자신 제외)
-    if(newId!==loginId && accounts.some(x=>x.login_id===newId)){ toast("이미 사용 중인 아이디입니다"); return; }
-    const acc=accounts.find(x=>x.login_id===loginId); if(!acc) return;
-    const sessionWasThis = localStorage.getItem(SESSION_KEY)===loginId;
-    acc.name=name; acc.login_id=newId; acc.birth=birth; acc.role=role;
-    if(newPw) acc.pw_hash=await sha256(newPw);
-    saveAccounts(accounts);
-    if(sessionWasThis) localStorage.setItem(SESSION_KEY,newId); // 본인 수정 시 세션 갱신
+    if(!name||!birth){ toast("이름·생년월일은 필수입니다"); return; }
+    const saveBtn=card.querySelector("#ed-save");
+    saveBtn.disabled=true; saveBtn.textContent="저장 중…";
+    const { error }=await sb.from("app_accounts").update({ name, birth, role }).eq("login_id",loginId);
+    saveBtn.disabled=false; saveBtn.textContent="저장";
+    if(error){ console.error(error); toast("저장 실패: "+(error.message||"")); return; }
+    await loadAllFromSupabase();
     card.remove(); showTop("account"); renderAuthBar();
     toast("계정 정보가 수정되었습니다");
   };
