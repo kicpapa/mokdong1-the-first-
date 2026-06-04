@@ -29,6 +29,14 @@
   header.top .sub{font-size:12.5px; opacity:.85}
 
   /* 상위 탭 (5개 메뉴) */
+  .topgroup{display:flex; gap:6px; margin-bottom:2px;}
+  .topgroup button{
+    appearance:none; border:0; cursor:pointer; font-family:inherit; font-weight:700;
+    font-size:13px; padding:7px 22px; color:#cdddec; background:rgba(255,255,255,.08);
+    border-radius:8px 8px 0 0; letter-spacing:-.2px;
+  }
+  .topgroup button:hover{color:#fff; background:rgba(255,255,255,.16)}
+  .topgroup button.active{color:#fff; background:rgba(255,255,255,.22)}
   .topnav{display:flex; gap:4px; flex-wrap:wrap}
   .topnav button{
     appearance:none; border:0; cursor:pointer; font-family:inherit; font-weight:700;
@@ -164,6 +172,10 @@
   .auth-bar button{appearance:none; border:1px solid rgba(255,255,255,.4); background:transparent; color:#fff;
     font-family:inherit; font-size:12px; font-weight:600; padding:4px 12px; border-radius:7px; cursor:pointer}
   .auth-bar button:hover{background:rgba(255,255,255,.15)}
+  .auth-bar .more-item{display:block; width:100%; text-align:left; border:0; border-radius:0;
+    color:var(--ink); background:#fff; padding:10px 14px; font-size:13px; font-weight:600}
+  .auth-bar .more-item:hover{background:var(--line-soft)}
+  #more-menu{ }
 
   /* 로그인/가입 카드 */
   .auth-box{max-width:420px; margin:30px auto}
@@ -323,6 +335,158 @@
   .hi-emg{border-left-color:var(--wait); background:var(--wait-soft)}
   .hi-emg .hi-txt{color:var(--wait); font-weight:700}
   .hi-cancel{border-left-color:var(--ink-soft); background:#f1f3f7}
+
+  /* ===== 모바일 대응 (좁은 화면, 768px 이하) ===== */
+  @media (max-width: 768px){
+    .wrap{ padding:0 12px 60px; }
+    header.top .wrap{ padding:0 12px; }
+    /* 상단 타이틀/바: 세로 정렬 + 줄바꿈 */
+    header.top h1, header.top .brand{ font-size:18px; }
+    .auth-bar{ flex-wrap:wrap; gap:6px; font-size:11.5px; }
+    .auth-bar .who{ font-size:11px; padding:3px 8px; }
+    .auth-bar button{ padding:4px 8px; font-size:11px; }
+    /* 메뉴바: 가로 스크롤 (넘침 방지) */
+    .topgroup{ gap:4px; }
+    .topgroup button{ flex:0 0 auto; padding:6px 16px; font-size:12.5px; }
+    .topnav{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+      gap:2px; padding-bottom:4px; }
+    .topnav::-webkit-scrollbar{ height:3px; }
+    .topnav button{ flex:0 0 auto; white-space:nowrap; padding:8px 10px; font-size:13px; }
+    /* 카드 여백 축소 */
+    .card{ padding:14px 12px; border-radius:10px; }
+    h2{ font-size:17px; }
+    /* 툴바(검색/필터): 검색창은 전체폭, 필터 드롭다운은 한 줄에 나란히 */
+    .toolbar{ gap:8px; flex-wrap:wrap; }
+    .toolbar input[type=text]{ width:100%; box-sizing:border-box; }
+    .toolbar select{ flex:1 1 auto; min-width:0; width:auto; box-sizing:border-box; font-size:12.5px; }
+    .toolbar .spacer{ display:none; }
+    /* 인라인 필터 select(결재함·게시판·기안 등) 모바일에서 좁게 나란히 */
+    .wrap-inner select{ min-width:0; font-size:12.5px; box-sizing:border-box; }
+    /* 표: 가로 스크롤 래퍼 */
+    .detail-items{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table{ font-size:12px; }
+    .detail-items table{ font-size:12px; min-width:480px; }
+    /* 목록 표도 가로 스크롤 가능하도록 부모에 스크롤 */
+    .list-wrap, .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    /* === 모바일 목록 표 카드형 (요청·기안작성·자료·결재함 등) === */
+    .mb-hide{ display:none !important; }
+    .card > div[style*="overflow"]:not([style*="vh"]){ overflow-x:hidden !important; }
+    .card > div[style*="overflow"]:not([style*="vh"]) table,
+    .card > div[style*="overflow"]:not([style*="vh"]) thead,
+    .card > div[style*="overflow"]:not([style*="vh"]) tbody,
+    .card > div[style*="overflow"]:not([style*="vh"]) tr,
+    .card > div[style*="overflow"]:not([style*="vh"]) td{ display:block; width:auto; }
+    .card > div[style*="overflow"]:not([style*="vh"]) thead{ display:none; }   /* 헤더 숨김 */
+    .card > div[style*="overflow"]:not([style*="vh"]) tr{
+      border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; background:#fff; position:relative;
+    }
+    .card > div[style*="overflow"]:not([style*="vh"]) td{
+      border:0 !important; padding:2px 0 !important; white-space:normal !important;
+      word-break:keep-all; overflow-wrap:anywhere; font-size:11.5px; color:var(--ink-soft); display:inline;
+    }
+    /* 셀 사이 구분점 */
+    .card > div[style*="overflow"]:not([style*="vh"]) td:not(.bcard-title):not(:last-child)::after{ content:" · "; color:var(--line); }
+    /* 제목: 첫 줄 크게, 길면 줄바꿈 (겹침 방지) */
+    .card > div[style*="overflow"]:not([style*="vh"]) td.bcard-title{
+      display:block; font-size:14px; font-weight:700; color:var(--ink); line-height:1.4; margin-bottom:4px;
+      white-space:normal !important; word-break:break-all; padding-right:48px;
+    }
+    /* 일반 목록 카드에서 상태칩 숨김 (진행단계로 충분) */
+    .card > div[style*="overflow"]:not([style*="vh"]) td.col-gdstatus{ display:none !important; }
+    .card > div[style*="overflow"]:not([style*="vh"]) td.col-gdstatus::after{ content:"" !important; }
+    /* 빈 목록 행은 블록 그대로 */
+    .card > div[style*="overflow"]:not([style*="vh"]) td.empty{ display:block; text-align:center; color:var(--ink-soft); font-size:13px; }
+    /* === 집행현황·전표집계(64vh)는 카드 변환 제외 → 가로 스크롤 표 유지 === */
+    div[style*="max-height:64vh"]{ overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+    div[style*="max-height:64vh"] table{ display:table; min-width:760px; }
+    div[style*="max-height:64vh"] thead{ display:table-header-group; }
+    div[style*="max-height:64vh"] tbody{ display:table-row-group; }
+    div[style*="max-height:64vh"] tr{ display:table-row; border:0; border-radius:0; padding:0; margin:0; background:transparent; }
+    div[style*="max-height:64vh"] th,
+    div[style*="max-height:64vh"] td{ display:table-cell !important; white-space:nowrap !important; padding:8px 10px !important; font-size:12px; }
+    div[style*="max-height:64vh"] td.bcard-title{ font-size:12px; font-weight:400; white-space:nowrap !important; }
+    /* === 재무 목록(max-height 래퍼): 모바일 카드형 === */
+    div[style*="max-height:62vh"]{ overflow-x:hidden !important; }
+    div[style*="max-height:62vh"] table,
+    div[style*="max-height:62vh"] thead,
+    div[style*="max-height:62vh"] tbody{ display:block; width:auto; }
+    div[style*="max-height:62vh"] thead{ display:none; }
+    div[style*="max-height:62vh"] tr{
+      display:flex; flex-wrap:wrap; align-items:center;
+      border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px; background:#fff;
+      position:relative; cursor:pointer;
+    }
+    div[style*="max-height:62vh"] tr.voided{ opacity:.55; }
+    div[style*="max-height:62vh"] td{ border:0 !important; padding:0 !important; }
+    /* === 줄 구성: ①No·일자·번호 ②제목 ③금액(있을때) ④작성자·현재상태 === */
+    /* ① 메타줄: No 일자 번호 (한 줄) */
+    div[style*="max-height:62vh"] td.col-no{ order:1; flex:0 0 auto; font-size:11px; color:var(--ink-soft); font-weight:700; }
+    div[style*="max-height:62vh"] td.col-date{ order:2; flex:0 0 auto; font-size:11px; color:var(--ink-soft); }
+    div[style*="max-height:62vh"] td.col-docno{ order:3; flex:1 1 auto; font-size:11px; color:var(--ink-soft); }
+    div[style*="max-height:62vh"] td.col-no::after,
+    div[style*="max-height:62vh"] td.col-date::after{ content:"·"; color:var(--line); margin:0 4px; }
+    /* 상태칩(목록 status) 숨김 */
+    div[style*="max-height:62vh"] td.col-status{ display:none !important; }
+    /* ② 제목: 새 줄 전체폭, 한 줄 넘으면 ... 생략 */
+    div[style*="max-height:62vh"] td.col-title{
+      order:5; flex:1 0 100%; width:100%; min-width:0;
+      font-size:14.5px; font-weight:700; line-height:1.4; margin:6px 0 2px; color:var(--brand);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    /* ③ 금액 (있을 때만, 새 줄) */
+    div[style*="max-height:62vh"] td.col-amt{
+      order:6; flex:1 0 100%; width:100%; font-size:12.5px; color:var(--ink); font-weight:600; margin-bottom:2px;
+    }
+    div[style*="max-height:62vh"] td.col-amt::before{ content:"금액 "; color:var(--ink-soft); font-weight:500; }
+    /* ④ 마지막 줄: 작성자 · 현재상태(+발주/입고 칩) */
+    div[style*="max-height:62vh"] td.col-who{ order:7; flex:0 0 auto; font-size:11.5px; color:var(--ink-soft); margin-top:3px; }
+    div[style*="max-height:62vh"] td.col-who::after{ content:"·"; color:var(--line); margin:0 5px; }
+    div[style*="max-height:62vh"] td.col-ap{ order:8; flex:0 0 auto; margin-top:3px; margin-right:6px; }
+    div[style*="max-height:62vh"] td.col-recv{ order:9; flex:0 0 auto; margin-top:3px; margin-right:6px; }
+    div[style*="max-height:62vh"] td.col-stage{ order:10; flex:0 0 auto; font-size:12px; color:var(--ink-soft); margin-top:3px; }
+    div[style*="max-height:62vh"] td.col-ref{ display:none !important; }
+    /* 열람 버튼 숨김 (카드 클릭으로 대체) */
+    div[style*="max-height:62vh"] td.col-open{ display:none !important; }
+    /* === 예산마스터 카드: 계정코드·계정명 제목 + 라벨:숫자 === */
+    div[style*="max-height:62vh"] td.bud-code{ order:1; font-size:11.5px; color:var(--ink-soft); font-weight:700; }
+    div[style*="max-height:62vh"] td.bud-name{ order:2; flex:0 0 100%; font-size:14px; font-weight:700; color:var(--ink); margin:3px 0 6px; }
+    div[style*="max-height:62vh"] td.bud-code::after{ content:""; }
+    div[style*="max-height:62vh"] td.bud-budget,
+    div[style*="max-height:62vh"] td.bud-spent,
+    div[style*="max-height:62vh"] td.bud-remain{ flex:0 0 100%; display:block; font-size:12.5px; margin-top:2px; }
+    div[style*="max-height:62vh"] td.bud-budget{ order:3; }
+    div[style*="max-height:62vh"] td.bud-spent{ order:4; }
+    div[style*="max-height:62vh"] td.bud-remain{ order:5; }
+    div[style*="max-height:62vh"] td.bud-budget::before{ content:"총예산액 : "; color:var(--ink-soft); font-weight:600; }
+    div[style*="max-height:62vh"] td.bud-spent::before{ content:"누적지출액 : "; color:var(--ink-soft); font-weight:600; }
+    div[style*="max-height:62vh"] td.bud-remain::before{ content:"잔여액 : "; color:var(--ink-soft); font-weight:600; }
+    div[style*="max-height:62vh"] td.bud-act{ order:6; flex:0 0 100%; display:flex; margin-top:8px; }
+    /* 폼 입력: 세로로 쌓기 */
+    .field{ width:100%; }
+    .field input, .field select, .field textarea{ width:100%; box-sizing:border-box; max-width:none !important; }
+    .seg{ flex-wrap:wrap; gap:6px; }
+    .seg button, .seg .btn{ flex:1 1 auto; }
+    /* 결재 박스/모달 액션: 버튼 세로 정렬 */
+    .modal-actions{ flex-wrap:wrap; gap:8px; }
+    .modal-actions button, .modal-actions .btn{ flex:1 1 auto; }
+    .approve-box{ padding:10px; }
+    .kv dt{ width:auto; }
+    .kv dd{ margin-left:0; }
+    /* 동적 열람 탭 라벨 너무 길지 않게 */
+    .tab-view{ max-width:180px; }
+    .tab-view .vt-label{ max-width:140px; }
+    /* 페이지네이션 */
+    .pager{ flex-wrap:wrap; gap:4px; }
+    /* 계정 화면 박스 폭 */
+    .auth-box{ max-width:100%; margin:16px auto; }
+  }
+  /* 아주 좁은 화면 (480px 이하) 추가 축소 */
+  @media (max-width: 480px){
+    .topnav button{ padding:7px 8px; font-size:12px; }
+    .card{ padding:12px 10px; }
+    table{ font-size:11.5px; }
+    .btn{ font-size:12.5px; }
+  }
 </style>
 </head>
 <body>
@@ -332,16 +496,25 @@
       <h1>지출관리</h1>
       <span class="auth-bar" id="auth-bar"></span>
     </div>
+    <nav class="topgroup" id="topgroup">
+      <button data-group="finance" class="active">재무</button>
+      <button data-group="general">일반</button>
+    </nav>
     <nav class="topnav" id="topnav">
-      <button data-top="my" class="active">My<span class="nav-badge" id="nav-badge" style="display:none">0</span></button>
-      <button data-top="pr">구매요청관리</button>
-      <button data-top="draft">기안관리</button>
-      <button data-top="order">발주관리</button>
-      <button data-top="settle">지출결의</button>
-      <button data-top="exec">집행</button>
-      <button data-top="budget">예산마스터</button>
-      <button data-top="urgent">긴급</button>
-      <button data-top="account">계정마스터</button>
+      <!-- 재무 그룹 -->
+      <button data-top="pr" data-grp="finance">구매요청관리</button>
+      <button data-top="draft" data-grp="finance">기안관리</button>
+      <button data-top="order" data-grp="finance">발주관리</button>
+      <button data-top="settle" data-grp="finance">지출결의</button>
+      <button data-top="exec" data-grp="finance">집행</button>
+      <button data-top="budget" data-grp="finance">예산마스터</button>
+      <button data-top="urgent" data-grp="finance">긴급</button>
+      <!-- 일반 그룹 -->
+      <button data-top="notice" data-grp="general">공지사항</button>
+      <button data-top="gendraft" data-grp="general">기안작성</button>
+      <button data-top="request" data-grp="general">요청게시판</button>
+      <button data-top="material" data-grp="general">중요자료</button>
+      <button data-top="account" data-grp="general">계정마스터</button>
     </nav>
   </div>
 </header>
@@ -442,7 +615,13 @@ const _cache = {
   budgets: [],
   events: [],
   read: {},          // { login_id: [event_id,...] }
-  docs: { pr:[], draft:[], quote:[], order:[], settle:[], urgent:[] }
+  docs: { pr:[], draft:[], quote:[], order:[], settle:[], urgent:[] },
+  notices: [],
+  posts: [],
+  comments: [],
+  genDrafts: [],
+  requests: [],
+  materials: []
 };
 const MODULE_KEYS = ["pr","draft","quote","order","settle","urgent"];
 
@@ -485,6 +664,18 @@ async function loadAllFromSupabase(){
     if(u){ const {data}=await sb.from("read_events").select("*").eq("login_id",u.login_id);
       _cache.read[u.login_id]=(data||[]).map(r=>"ev_"+r.event_id); }
   }catch(e){ console.error(e); }
+  // 공지사항
+  try{ const {data}=await sb.from("notices").select("*").order("id",{ascending:false}); _cache.notices=data||[]; }catch(e){ console.error(e); }
+  // 게시판 글
+  try{ const {data}=await sb.from("posts").select("*").order("id",{ascending:false}); _cache.posts=data||[]; }catch(e){ console.error(e); }
+  // 답글
+  try{ const {data}=await sb.from("comments").select("*").order("id",{ascending:true}); _cache.comments=data||[]; }catch(e){ console.error(e); }
+  // 자유 결재선 기안
+  try{ const {data}=await sb.from("gen_drafts").select("*").order("id",{ascending:false}); _cache.genDrafts=data||[]; }catch(e){ console.error(e); }
+  // 요청게시판
+  try{ const {data}=await sb.from("requests").select("*").order("id",{ascending:false}); _cache.requests=data||[]; }catch(e){ console.error(e); }
+  // 중요자료
+  try{ const {data}=await sb.from("materials").select("*").order("id",{ascending:false}); _cache.materials=data||[]; }catch(e){ console.error(e); }
 }
 
 // ===== 계정 =====
@@ -536,6 +727,10 @@ async function sbLogin(idOrEmail, pw){
 async function sbLogout(){
   await sb.auth.signOut();
   _currentUser = null;
+  // 캐시 비우기 (비로그인 상태에서 데이터 잔존 방지)
+  _cache.accounts=[]; _cache.budgets=[]; _cache.events=[]; _cache.read={};
+  _cache.docs={ pr:[], draft:[], quote:[], order:[], settle:[], urgent:[] };
+  _cache.notices=[]; _cache.posts=[]; _cache.comments=[]; _cache.genDrafts=[]; _cache.requests=[]; _cache.materials=[];
 }
 // 본인 비밀번호 변경 (현재 비번 확인 후) — 마스터 제외
 async function sbChangePassword(currentPw, newPw){
@@ -826,40 +1021,42 @@ function sectionHtml(m){
 
   <!-- 작성 -->
   <section class="panel" id="panel-${m.key}-write">
-    <div class="card">${writeBody}</div>
+    <div class="card">
+      ${m.key==="draft"?`<div style="background:var(--wait-soft);border:1px solid var(--wait);color:var(--wait);font-size:12.5px;font-weight:600;padding:10px 12px;border-radius:8px;margin-bottom:14px">⚠️ 구매요청 없이 직접 작성하는 기안입니다. 가급적 구매요청관리에서 '기안 생성'으로 출발하세요. 직접 작성 건은 집행현황에 <b>'구매요청 없음'</b>으로 표시됩니다.</div>`:""}
+      ${writeBody}</div>
   </section>
 
   <!-- 목록 -->
   <section class="panel active" id="panel-${m.key}-list">
     <div class="card">
       <div class="toolbar">
-        <input type="text" id="${m.key}-search" placeholder="${searchPh}">
-        <select id="${m.key}-filter-status">
-          <option value="">상태 전체</option>
-          <option value="${STATUS_OPEN}">${STATUS_OPEN}</option>
-          <option value="승인">승인</option>
-          <option value="반려">반려</option>
-          <option value="폐기">폐기</option>
+        <input type="text" id="${m.key}-search" placeholder="검색">
+        <select id="${m.key}-filter-col" style="flex:0 0 auto;width:82px;padding:8px 2px;font-size:12px">
+          <option value="">전체</option>
+          <option value="제목">제목</option>
+          <option value="번호">번호</option>
+          <option value="요청자">요청자</option>
+          <option value="상태">상태</option>
+          ${stageOptionsFor(m.key).length?`<option value="단계">단계</option>`:""}
+          <option value="일자">일자</option>
         </select>
-        <select id="${m.key}-filter-void">
-          <option value="active">유효 건만</option>
-          <option value="all">폐기 포함 전체</option>
+        <select id="${m.key}-filter-void" style="flex:0 0 auto;width:66px;padding:8px 2px;font-size:12px">
+          <option value="active">유효</option>
+          <option value="all">전체</option>
         </select>
         <div class="spacer"></div>
-        <button class="btn btn-ghost btn-sm" data-export="${m.key}">백업 내보내기</button>
-        <button class="btn btn-ghost btn-sm" data-import="${m.key}">불러오기</button>
-        <input type="file" id="${m.key}-import-file" accept="application/json" hidden>
       </div>
       <div style="overflow:auto; max-height:62vh">
         <table>
           <thead><tr>
             <th style="width:44px">No</th>
             <th style="width:96px">일자</th>
-            <th style="width:150px">번호</th>
+            <th style="width:150px" class="mb-hide">번호</th>
             <th>제목</th>
             <th style="width:90px">요청자</th>
             <th style="width:90px">상태</th>
-            <th style="width:150px">참조</th>
+            <th style="width:140px" class="col-stage-h">현재 단계</th>
+            ${(m.key==="pr"||m.key==="draft")?"":'<th style="width:150px" class="mb-hide">참조</th>'}
             <th style="width:60px"></th>
           </tr></thead>
           <tbody id="${m.key}-rows"></tbody>
@@ -1107,17 +1304,36 @@ function renderPager(containerId, total, key, onGo){
   el.querySelectorAll("[data-pg]").forEach(b=>{ b.onclick=()=>{ setPage(key, Number(b.dataset.pg)); onGo(); }; });
 }
 
+// 모듈별 현재단계 필터 옵션
+function stageOptionsFor(mkey){
+  if(mkey==="pr") return ["재무 승인 대기","승인 완료","반려"];
+  if(mkey==="draft") return ["재무 승인 대기","위원장 승인 대기","최종 승인 완료","반려"];
+  if(mkey==="order") return ["입고 확인 대기","재무 승인 대기","승인 완료","반려"];
+  if(mkey==="settle"||mkey==="urgent") return ["재무 승인 대기","위원장 승인 대기","재무분과장 최종승인 대기","최종 확정","반려"];
+  return [];
+}
 function renderList(m){
   const recs=loadRecs(m);
   const q=val(`${m.key}-search`).trim().toLowerCase();
-  const fs=val(`${m.key}-filter-status`);
+  const fcol=val(`${m.key}-filter-col`);
   const fv=val(`${m.key}-filter-void`);
+  // 검색 대상 열 정의
+  const colGet={
+    "제목": d=> d.title||d.goods||"",
+    "번호": d=> d.draft_no||"",
+    "요청자": d=> m.simple ? (d.requester||d.drafter||"") : (d.drafter||""),
+    "상태": d=> d.status||"",
+    "단계": d=> d.status==="폐기"?"폐기":finStageText(m.key,d),
+    "일자": d=> (d.created_at||"").slice(0,10)
+  };
+  const allCols=()=>Object.values(colGet);
   let rows=recs.slice().reverse().filter(d=>{
     if(fv==="active" && d.status==="폐기") return false;
-    if(fs && d.status!==fs) return false;
     if(q){
-      const hay=`${d.draft_no} ${d.title} ${d.drafter} ${d.requester||""} ${d.goods||""} ${d.account||""}`.toLowerCase();
-      if(!hay.includes(q)) return false;
+      let hay;
+      if(fcol && colGet[fcol]) hay=String(colGet[fcol](d)||"");
+      else hay=allCols().map(f=>String(f(d)||"")).join(" ");
+      if(!hay.toLowerCase().includes(q)) return false;
     }
     return true;
   });
@@ -1138,15 +1354,16 @@ function renderList(m){
     const titleText = d.title || d.goods || "";
     const whoText = m.simple ? (d.requester||d.drafter||"") : (d.drafter||"");
     tr.innerHTML=`
-      <td class="muted">${no}</td>
-      <td>${esc(d.created_at)}</td>
-      <td class="no">${esc(d.draft_no)}${d.version>1?` <span class="muted">v${d.version}</span>`:""}</td>
-      <td style="white-space:pre-wrap">${esc(titleText)}</td>
-      <td>${esc(whoText)}</td>
-      <td>${badge(d.status)}</td>
-      <td>${listStatusChips(d)}</td>
-      <td><button class="linkbtn">열람</button></td>`;
-    tr.querySelector(".linkbtn").onclick=()=>openDetail(m, d.draft_no);
+      <td class="muted col-no">${no}</td>
+      <td class="col-date">${esc(d.created_at)}</td>
+      <td class="no col-docno">${esc(d.draft_no)}${d.version>1?` <span class="muted">v${d.version}</span>`:""}</td>
+      <td class="col-title" style="white-space:pre-wrap">${esc(titleText)}</td>
+      <td class="col-who">${esc(whoText)}</td>
+      <td class="col-status">${badge(d.status)}</td>
+      <td class="col-stage" style="font-size:12px;color:var(--ink-soft)">${d.status==="폐기"?"폐기":esc(finStageText(m.key,d))}</td>
+      ${(m.key==="pr"||m.key==="draft")?"":`<td class="col-ref">${listStatusChips(d)}</td>`}
+      <td class="col-open"><button class="linkbtn">열람</button></td>`;
+    tr.onclick=()=>openDetail(m, d.draft_no);
     tb.appendChild(tr);
   });
   renderPager(`${m.key}-pager`, total, m.key, ()=>renderList(m));
@@ -1960,14 +2177,12 @@ function draftApprovalBox(m,d){
         <button class="btn btn-primary btn-sm" data-dseq="${m.key}|${esc(d.draft_no)}|audit|참조">추후 참조</button>`;
     }
 
-    // ⚡ 긴급승인 토글 (재무과/위원장, 감사중 단계에서)
-    if((finRole || u.role===DRAFT_CHAIR_ROLE) && stage!=="반려"){
-      const on=!!d.emergency;
+    // ⚡ 긴급승인 기능 비활성화 (현재 미사용) — 기존 설정된 건만 표시
+    if(d.emergency && (finRole || u.role===DRAFT_CHAIR_ROLE) && stage!=="반려"){
       action+=`<hr style="border:0;border-top:1px dashed var(--line);margin:14px 0">
-        <div class="seg" style="font-weight:700;color:var(--void);margin-bottom:4px">⚡ 긴급승인 ${on?"(설정됨)":""}</div>
-        <div class="muted" style="margin-bottom:6px">${on?"감사 참조를 생략하고 재무과·위원장 승인만으로 진행 중입니다. 감사 거부권은 유지됩니다.":"켜면 감사 2명의 참조 없이 재무과·위원장 승인만으로 진행합니다. (사유 필수)"}</div>
-        ${on?"":`<div class="field" style="margin:8px 0"><label>긴급승인 사유</label><textarea id="emg-cmt-${m.key}" class="mid" placeholder="긴급 처리 사유"></textarea></div>`}
-        <button class="btn ${on?'btn-ghost':'btn-primary'} btn-sm" data-emergency="${m.key}|${esc(d.draft_no)}">${on?"긴급승인 해제":"긴급승인 켜기"}</button>`;
+        <div class="seg" style="font-weight:700;color:var(--void);margin-bottom:4px">⚡ 긴급승인 (설정됨)</div>
+        <div class="muted" style="margin-bottom:6px">감사 참조를 생략하고 진행된 건입니다.</div>
+        <button class="btn btn-ghost btn-sm" data-emergency="${m.key}|${esc(d.draft_no)}">긴급승인 해제</button>`;
     }
 
     if(!action){
@@ -2814,14 +3029,32 @@ function importData(m,file){
 function renderAuthBar(){
   const bar=document.getElementById("auth-bar");
   const nav=document.getElementById("topnav");
+  const grp=document.getElementById("topgroup");
   const u=currentUser();
   if(u){
     bar.innerHTML=`<span class="who">${esc(u.name)} · ${esc(u.role)}</span>
       <span id="sync-state" style="font-size:11px;color:#cfe3ff;margin:0 6px"></span>
-      <button id="refresh-btn" title="최신 데이터로 새로고침">🔄 새로고침</button>
-      ${canExportBackup(u)?'<button id="export-btn" title="전체 데이터를 JSON 파일로 내보내기">⬇ 내보내기</button>':''}
-      <button id="logout-btn">로그아웃</button>`;
+      <button id="inbox-btn" title="내 결재함">📥 결재함<span class="nav-badge" id="inbox-badge" style="display:none">0</span></button>
+      <button id="alert-btn" title="알림">🔔 알림<span class="nav-badge" id="nav-badge" style="display:none">0</span></button>
+      <span style="position:relative;display:inline-block">
+        <button id="more-btn" title="더보기" style="font-size:16px;line-height:1">⋯</button>
+        <span id="more-menu" style="display:none;position:absolute;right:0;top:110%;z-index:50;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:160px;overflow:hidden">
+          <button id="refresh-btn" class="more-item">🔄 새로고침</button>
+          ${canExportBackup(u)?'<button id="export-btn" class="more-item">⬇ 내보내기</button>':''}
+          <button id="logout-btn" class="more-item" style="color:var(--void)">로그아웃</button>
+        </span>
+      </span>`;
+    const moreBtn=bar.querySelector("#more-btn");
+    const moreMenu=bar.querySelector("#more-menu");
+    moreBtn.onclick=(e)=>{
+      e.stopPropagation();
+      const open = moreMenu.style.display!=="none";
+      moreMenu.style.display = open?"none":"block";
+      if(!open){ setTimeout(()=>document.addEventListener("click", function _c(){ moreMenu.style.display="none"; document.removeEventListener("click",_c); }), 0); }
+    };
     bar.querySelector("#refresh-btn").onclick=()=>refreshFromSupabase(true);
+    bar.querySelector("#inbox-btn").onclick=()=>showTop("inbox");
+    bar.querySelector("#alert-btn").onclick=()=>showTop("my");
     const exb=bar.querySelector("#export-btn");
     if(exb) exb.onclick=()=>{ if(exportBackupJson("manual")) toast("전체 백업 파일을 내려받았습니다"); };
     bar.querySelector("#logout-btn").onclick=async()=>{
@@ -2833,9 +3066,11 @@ function renderAuthBar(){
       await sbLogout(); await afterAuthChange(); toast("로그아웃되었습니다");
     };
     if(nav) nav.style.display="";   // 로그인 시 메뉴 노출
+    if(grp) grp.style.display="";
   }else{
     bar.innerHTML=`<span>로그인하지 않음</span>`;
     if(nav) nav.style.display="none";  // 비로그인 시 메뉴 숨김 (계정 화면만)
+    if(grp) grp.style.display="none";
   }
 }
 async function afterAuthChange(){
@@ -2964,10 +3199,17 @@ function wireMySection(){
 function updateNavBadge(){
   const u=currentUser();
   const badge=document.getElementById("nav-badge");
-  if(!badge) return;
-  const n=unreadCountFor(u);
-  if(n>0){ badge.textContent=n>99?"99+":n; badge.style.display="inline-block"; }
-  else badge.style.display="none";
+  if(badge){
+    const n=unreadCountFor(u);
+    if(n>0){ badge.textContent=n>99?"99+":n; badge.style.display="inline-block"; }
+    else badge.style.display="none";
+  }
+  const ib=document.getElementById("inbox-badge");
+  if(ib){
+    const c=inboxCount(u);
+    if(c>0){ ib.textContent=c>99?"99+":c; ib.style.display="inline-block"; }
+    else ib.style.display="none";
+  }
 }
 
 /* =========================================================
@@ -3172,15 +3414,23 @@ function orderSectionHtml(){
   <section class="panel active" id="panel-order-list">
     <div class="card">
       <div class="hint" style="margin-bottom:12px">발주는 기안 상세의 '발주 올리기'로 생성됩니다. 사무직원 작성 → 재무과 승인 → (감사·위원장 참조) → 입고 확인.</div>
-      <div class="toolbar"><input type="text" id="order-search" placeholder="발주번호·기안·업체 검색">
-        <select id="order-filter-void"><option value="active">유효 건만</option><option value="all">폐기 포함 전체</option></select>
+      <div class="toolbar"><input type="text" id="order-search" placeholder="검색">
+        <select id="order-filter-col" style="flex:0 0 auto;width:82px;padding:8px 2px;font-size:12px">
+          <option value="">전체</option>
+          <option value="제목">제목</option>
+          <option value="번호">번호</option>
+          <option value="업체">업체</option>
+          <option value="단계">단계</option>
+          <option value="일자">일자</option>
+        </select>
+        <select id="order-filter-void" style="flex:0 0 auto;width:66px;padding:8px 2px;font-size:12px"><option value="active">유효</option><option value="all">전체</option></select>
         <div class="spacer"></div></div>
       <div style="overflow:auto; max-height:62vh">
         <table>
           <thead><tr>
             <th style="width:44px">No</th><th style="width:96px">일자</th>
-            <th style="width:160px">발주번호</th><th>건명/업체</th>
-            <th style="width:120px">금액</th><th style="width:90px">승인</th><th style="width:80px">입고</th><th style="width:60px"></th>
+            <th style="width:160px" class="mb-hide">발주번호</th><th>건명/업체</th>
+            <th style="width:120px" class="mb-hide">금액</th><th style="width:80px">발주</th><th style="width:70px">입고</th><th style="width:130px">현재 단계</th><th style="width:60px"></th>
           </tr></thead>
           <tbody id="order-rows"></tbody>
         </table>
@@ -3199,6 +3449,8 @@ function wireOrderSection(){
   if(s) s.addEventListener("input",()=>{ setPage("order",1); renderOrderList(); });
   const ofv=document.getElementById("order-filter-void");
   if(ofv) ofv.addEventListener("change",()=>{ setPage("order",1); renderOrderList(); });
+  const ofs=document.getElementById("order-filter-col");
+  if(ofs) ofs.addEventListener("change",()=>{ setPage("order",1); renderOrderList(); });
   // 최종금액 입력 시 차이 실시간 계산 (위임)
   document.getElementById("section-order").addEventListener("input",(e)=>{
     if(e.target && e.target.id==="o-final"){
@@ -3247,9 +3499,22 @@ function renderOrderList(){
   const recs=loadRecs(m);
   const q=val("order-search").trim().toLowerCase();
   const voidF=(document.getElementById("order-filter-void")||{}).value||"active";
+  const fcol=(document.getElementById("order-filter-col")||{}).value||"";
+  const oGet={
+    "제목": x=>x.title||"",
+    "번호": x=>x.draft_no||"",
+    "업체": x=>x.vendor||"",
+    "단계": x=>x.status==="폐기"?"폐기":finStageText("order",x),
+    "일자": x=>(x.created_at||"").slice(0,10)
+  };
   let rows=recs.slice().reverse().filter(x=>{
     if(voidF==="active" && x.status==="폐기") return false;
-    if(q){ const hay=`${x.draft_no} ${x.from_draft||""} ${x.vendor||""} ${x.title||""}`.toLowerCase(); if(!hay.includes(q)) return false; }
+    if(q){
+      let hay;
+      if(fcol && oGet[fcol]) hay=String(oGet[fcol](x)||"");
+      else hay=Object.values(oGet).map(f=>String(f(x)||"")).join(" ");
+      if(!hay.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
   const tb=document.getElementById("order-rows"); tb.innerHTML="";
@@ -3262,14 +3527,15 @@ function renderOrderList(){
     const idx=startIdx+i;
     const tr=document.createElement("tr");
     if(x.status==="폐기") tr.className="voided";
-    const apTxt = x.approval?x.approval.result:"상신";
-    tr.innerHTML=`<td class="muted">${total-idx}</td><td>${esc(x.created_at)}</td>
-      <td class="no">${esc(x.draft_no)}</td><td style="white-space:pre-wrap">${esc(x.title||"")}${x.vendor?` / ${esc(x.vendor)}`:""}</td>
-      <td style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
-      <td>${badge(apTxt)}</td>
-      <td>${x.received?'<span class="chip chip-ok">입고 ✓</span>':'<span class="chip chip-wait">미입고</span>'}</td>
-      <td><button class="linkbtn" data-open-order-row="${esc(x.draft_no)}">열람</button></td>`;
-    tr.querySelector("[data-open-order-row]").onclick=()=>openDetail(m,x.draft_no);
+    const ordered = !!x.draft_no;  // 발주 레코드 존재 = 발주 작성(상신)됨
+    tr.innerHTML=`<td class="muted col-no">${total-idx}</td><td class="col-date">${esc(x.created_at)}</td>
+      <td class="no col-docno">${esc(x.draft_no)}</td><td class="col-title" style="white-space:pre-wrap">${esc(x.title||"")}${x.vendor?` / ${esc(x.vendor)}`:""}</td>
+      <td class="col-amt" style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
+      <td class="col-ap">${ordered?'<span class="chip chip-ok">발주 ✓</span>':'<span class="chip chip-wait">대기</span>'}</td>
+      <td class="col-recv">${x.received?'<span class="chip chip-ok">입고 ✓</span>':'<span class="chip chip-wait">미입고</span>'}</td>
+      <td class="col-stage" style="font-size:12px;color:var(--ink-soft)">${x.status==="폐기"?"폐기":esc(finStageText("order",x))}</td>
+      <td class="col-open"><button class="linkbtn" data-open-order-row="${esc(x.draft_no)}">열람</button></td>`;
+    tr.onclick=()=>openDetail(m,x.draft_no);
     tb.appendChild(tr);
   });
   renderPager("order-pager", total, "order", renderOrderList);
@@ -3591,12 +3857,20 @@ function settleSectionHtml(){
   <section class="panel active" id="panel-settle-list">
     <div class="card">
       <div class="hint" style="margin-bottom:12px">지출결의는 발주관리(입고·재무승인 완료)에서 '지출결의 올리기'로 생성됩니다. 작성 → 감사 참조 → 위원장 승인 → 재무분과장 OTP 최종.</div>
-      <div class="toolbar"><input type="text" id="settle-search" placeholder="지결번호·발주·건명 검색">
-        <select id="settle-filter-void"><option value="active">유효 건만</option><option value="all">폐기 포함 전체</option></select>
+      <div class="toolbar"><input type="text" id="settle-search" placeholder="검색">
+        <select id="settle-filter-col" style="flex:0 0 auto;width:82px;padding:8px 2px;font-size:12px">
+          <option value="">전체</option>
+          <option value="제목">제목</option>
+          <option value="번호">번호</option>
+          <option value="상태">상태</option>
+          <option value="단계">단계</option>
+          <option value="일자">일자</option>
+        </select>
+        <select id="settle-filter-void" style="flex:0 0 auto;width:66px;padding:8px 2px;font-size:12px"><option value="active">유효</option><option value="all">전체</option></select>
         <div class="spacer"></div></div>
-      <div style="overflow:auto; max-height:60vh">
+      <div style="overflow:auto; max-height:62vh">
         <table>
-          <thead><tr><th style="width:44px">No</th><th style="width:96px">일자</th><th style="width:190px">지결번호</th><th>건명</th><th style="width:120px">지출액</th><th style="width:100px">상태</th><th style="width:60px"></th></tr></thead>
+          <thead><tr><th style="width:44px">No</th><th style="width:96px">일자</th><th style="width:190px" class="mb-hide">지결번호</th><th>제목</th><th style="width:120px" class="mb-hide">지출액</th><th style="width:90px">상태</th><th style="width:140px">현재 단계</th><th style="width:60px"></th></tr></thead>
           <tbody id="settle-rows"></tbody>
         </table>
       </div>
@@ -3613,6 +3887,8 @@ function wireSettleSection(){
   if(sc) sc.addEventListener("input",()=>{ setPage("settle",1); renderSettleList(); });
   const sfv=document.getElementById("settle-filter-void");
   if(sfv) sfv.addEventListener("change",()=>{ setPage("settle",1); renderSettleList(); });
+  const sfs=document.getElementById("settle-filter-col");
+  if(sfs) sfs.addEventListener("change",()=>{ setPage("settle",1); renderSettleList(); });
   const sec=document.getElementById("section-settle");
   if(sec && !sec._wired){
     sec._wired=true;
@@ -3672,9 +3948,22 @@ function renderSettleList(){
   const recs=loadRecs(m);
   const q=val("settle-search").trim().toLowerCase();
   const voidF=(document.getElementById("settle-filter-void")||{}).value||"active";
+  const fcol=(document.getElementById("settle-filter-col")||{}).value||"";
+  const sGet={
+    "제목": x=>x.title||"",
+    "번호": x=>x.draft_no||"",
+    "상태": x=>settleStage(x),
+    "단계": x=>x.status==="폐기"?"폐기":finStageText("settle",x),
+    "일자": x=>(x.created_at||"").slice(0,10)
+  };
   let rows=recs.slice().reverse().filter(x=>{
     if(voidF==="active" && x.status==="폐기") return false;
-    if(q){ const hay=`${x.draft_no} ${x.from_order||""} ${x.title||""}`.toLowerCase(); if(!hay.includes(q)) return false; }
+    if(q){
+      let hay;
+      if(fcol && sGet[fcol]) hay=String(sGet[fcol](x)||"");
+      else hay=Object.values(sGet).map(f=>String(f(x)||"")).join(" ");
+      if(!hay.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
   const tb=document.getElementById("settle-rows"); if(!tb) return; tb.innerHTML="";
@@ -3687,12 +3976,13 @@ function renderSettleList(){
     const idx=startIdx+i;
     const tr=document.createElement("tr");
     if(x.status==="폐기") tr.className="voided";
-    tr.innerHTML=`<td class="muted">${total-idx}</td><td>${esc(x.created_at)}</td>
-      <td class="no">${esc(x.draft_no)}</td><td style="white-space:pre-wrap">${esc(x.title||"")}</td>
-      <td style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
-      <td>${badge(settleStage(x))}</td>
-      <td><button class="linkbtn" data-open-settle-row="${esc(x.draft_no)}">열람</button></td>`;
-    tr.querySelector("[data-open-settle-row]").onclick=()=>openDetail(m,x.draft_no);
+    tr.innerHTML=`<td class="muted col-no">${total-idx}</td><td class="col-date">${esc(x.created_at)}</td>
+      <td class="no col-docno">${esc(x.draft_no)}</td><td class="col-title" style="white-space:pre-wrap">${esc(x.title||"")}</td>
+      <td class="col-amt" style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
+      <td class="col-status">${badge(x.status==="폐기"?"폐기":settleStage(x))}</td>
+      <td class="col-stage" style="font-size:12px;color:var(--ink-soft)">${x.status==="폐기"?"폐기":esc(finStageText("settle",x))}</td>
+      <td class="col-open"><button class="linkbtn" data-open-settle-row="${esc(x.draft_no)}">열람</button></td>`;
+    tr.onclick=()=>openDetail(m,x.draft_no);
     tb.appendChild(tr);
   });
   renderPager("settle-pager", total, "settle", renderSettleList);
@@ -3711,7 +4001,19 @@ function execSectionHtml(){
   <section class="panel active" id="panel-exec-list">
     <div class="card">
       <div class="hint" style="margin-bottom:12px">구매요청부터 지출결의까지 전체 진행 현황입니다. 발주·지결이 분할되면 각 행으로 표시되고 상위 번호는 반복됩니다.</div>
-      <div class="toolbar"><input type="text" id="exec-search" placeholder="번호·건명 검색"><div class="spacer"></div></div>
+      <div class="toolbar"><input type="text" id="exec-search" placeholder="번호·건명 검색">
+        <select id="exec-filter-status">
+          <option value="">상태 전체</option>
+          <option value="구매요청대기">구매요청대기</option>
+          <option value="기안생성대기">기안생성대기</option>
+          <option value="기안승인대기">기안승인대기</option>
+          <option value="기안승인">기안승인</option>
+          <option value="발주">발주</option>
+          <option value="입고">입고</option>
+          <option value="지결">지결</option>
+          <option value="긴급">긴급</option>
+        </select>
+        <div class="spacer"></div></div>
       <div style="overflow:auto; max-height:64vh">
         <table>
           <thead><tr>
@@ -3761,6 +4063,8 @@ function wireExecSection(){
   });
   const s=document.getElementById("exec-search");
   if(s) s.addEventListener("input",()=>{ setPage("exec",1); renderExecList(); });
+  const efs=document.getElementById("exec-filter-status");
+  if(efs) efs.addEventListener("change",()=>{ setPage("exec",1); renderExecList(); });
   const ss=document.getElementById("slip-search");
   if(ss) ss.addEventListener("input",()=>{ setPage("slip",1); renderSlipList(); });
   const sf=document.getElementById("slip-filter-status");
@@ -3881,12 +4185,20 @@ function urgentSectionHtml(){
   <section class="panel active" id="panel-urgent-list">
     <div class="card">
       <div class="hint" style="margin-bottom:12px">긴급지출은 구매요청·기안·발주 단계 없이 사무직원이 바로 작성하고 사후 승인받는 절차입니다. 결재선은 지출결의와 동일(재무분과 → 감사 참조 → 위원장 → 재무분과장 최종)하며, 삭제는 재무분과장만 가능합니다.</div>
-      <div class="toolbar"><input type="text" id="urgent-search" placeholder="긴급번호·건명 검색">
-        <select id="urgent-filter-void"><option value="active">유효 건만</option><option value="all">폐기 포함 전체</option></select>
+      <div class="toolbar"><input type="text" id="urgent-search" placeholder="검색">
+        <select id="urgent-filter-col" style="flex:0 0 auto;width:82px;padding:8px 2px;font-size:12px">
+          <option value="">전체</option>
+          <option value="제목">제목</option>
+          <option value="번호">번호</option>
+          <option value="상태">상태</option>
+          <option value="단계">단계</option>
+          <option value="일자">일자</option>
+        </select>
+        <select id="urgent-filter-void" style="flex:0 0 auto;width:66px;padding:8px 2px;font-size:12px"><option value="active">유효</option><option value="all">전체</option></select>
         <div class="spacer"></div></div>
-      <div style="overflow:auto; max-height:60vh">
+      <div style="overflow:auto; max-height:62vh">
         <table>
-          <thead><tr><th style="width:44px">No</th><th style="width:96px">일자</th><th style="width:160px">긴급번호</th><th>건명</th><th style="width:120px">지출액</th><th style="width:100px">상태</th><th style="width:60px"></th></tr></thead>
+          <thead><tr><th style="width:44px">No</th><th style="width:96px">일자</th><th style="width:160px" class="mb-hide">긴급번호</th><th>제목</th><th style="width:120px" class="mb-hide">지출액</th><th style="width:90px">상태</th><th style="width:140px">현재 단계</th><th style="width:60px"></th></tr></thead>
           <tbody id="urgent-rows"></tbody>
         </table>
       </div>
@@ -3919,6 +4231,8 @@ function wireUrgentSection(){
   if(sc) sc.addEventListener("input",()=>{ setPage("urgent",1); renderUrgentList(); });
   const ufv=document.getElementById("urgent-filter-void");
   if(ufv) ufv.addEventListener("change",()=>{ setPage("urgent",1); renderUrgentList(); });
+  const ufs=document.getElementById("urgent-filter-col");
+  if(ufs) ufs.addEventListener("change",()=>{ setPage("urgent",1); renderUrgentList(); });
   const sec=document.getElementById("section-urgent");
   if(sec && !sec._wired){
     sec._wired=true;
@@ -3962,9 +4276,22 @@ function renderUrgentList(){
   const recs=loadRecs(m);
   const q=val("urgent-search").trim().toLowerCase();
   const voidF=(document.getElementById("urgent-filter-void")||{}).value||"active";
+  const fcol=(document.getElementById("urgent-filter-col")||{}).value||"";
+  const uGet={
+    "제목": x=>x.title||"",
+    "번호": x=>x.draft_no||"",
+    "상태": x=>settleStage(x),
+    "단계": x=>x.status==="폐기"?"폐기":finStageText("urgent",x),
+    "일자": x=>(x.created_at||"").slice(0,10)
+  };
   let rows=recs.slice().reverse().filter(x=>{
     if(voidF==="active" && x.status==="폐기") return false;
-    if(q){ const hay=`${x.draft_no} ${x.title||""}`.toLowerCase(); if(!hay.includes(q)) return false; }
+    if(q){
+      let hay;
+      if(fcol && uGet[fcol]) hay=String(uGet[fcol](x)||"");
+      else hay=Object.values(uGet).map(f=>String(f(x)||"")).join(" ");
+      if(!hay.toLowerCase().includes(q)) return false;
+    }
     return true;
   });
   const tb=document.getElementById("urgent-rows"); if(!tb) return; tb.innerHTML="";
@@ -3976,12 +4303,14 @@ function renderUrgentList(){
   rows.slice(startIdx,startIdx+PAGE_SIZE).forEach((x,i)=>{
     const idx=startIdx+i;
     const tr=document.createElement("tr");
-    tr.innerHTML=`<td class="muted">${total-idx}</td><td>${esc(x.created_at)}</td>
-      <td class="no">${esc(x.draft_no)}</td><td style="white-space:pre-wrap">${esc(x.title||"(제목 미입력)")}</td>
-      <td style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
-      <td>${badge(settleStage(x))}</td>
-      <td><button class="linkbtn" data-open-urgent-row="${esc(x.draft_no)}">열람</button></td>`;
-    tr.querySelector("[data-open-urgent-row]").onclick=()=>openDetail(m,x.draft_no);
+    if(x.status==="폐기") tr.className="voided";
+    tr.innerHTML=`<td class="muted col-no">${total-idx}</td><td class="col-date">${esc(x.created_at)}</td>
+      <td class="no col-docno">${esc(x.draft_no)}</td><td class="col-title" style="white-space:pre-wrap">${esc(x.title||"(제목 미입력)")}</td>
+      <td class="col-amt" style="font-variant-numeric:tabular-nums">${won(x.amount)}</td>
+      <td class="col-status">${badge(x.status==="폐기"?"폐기":settleStage(x))}</td>
+      <td class="col-stage" style="font-size:12px;color:var(--ink-soft)">${x.status==="폐기"?"폐기":esc(finStageText("urgent",x))}</td>
+      <td class="col-open"><button class="linkbtn" data-open-urgent-row="${esc(x.draft_no)}">열람</button></td>`;
+    tr.onclick=()=>openDetail(m,x.draft_no);
     tb.appendChild(tr);
   });
   renderPager("urgent-pager", total, "urgent", renderUrgentList);
@@ -4063,15 +4392,12 @@ function buildExecRows(){
       if(rec.expedite) tags.push("⚡선진행");
       if(rec.emergency) tags.push("⚡긴급승인");
     });
-    if(draft){
-      const s=draftSeq(draft);
-      if(s.chair && s.chair.result==="승인" && !draft.emergency && (s.audits||[]).filter(a=>a.result==="참조").length===0) tags.push("감사前 선진행");
-    }
     if(settle){
       const s=settleSeq(settle);
-      if(s.chair && (s.audits||[]).length===0) tags.push("감사前 선진행");
       if(s.otp && s.otp.self) tags.push("작성자 예외승인");
     }
+    // 구매요청 없이 만든 기안 표시
+    if(draft && !draft.from_pr) tags.push("구매요청 없음");
     return [...new Set(tags)].join(", ") || "-";
   }
 
@@ -4142,7 +4468,9 @@ const EXEC_STATUS_COLOR={
 function renderExecList(){
   const all=buildExecRows();
   const q=val("exec-search").trim().toLowerCase();
+  const fst=(document.getElementById("exec-filter-status")||{}).value||"";
   let rows=all.filter(r=>{
+    if(fst && r.status!==fst) return false;
     if(!q) return true;
     return `${r.pr} ${r.draft} ${r.order} ${r.settle} ${r.pending} ${r.special} ${r._title}`.toLowerCase().includes(q);
   });
@@ -4211,9 +4539,9 @@ function budgetSectionHtml(){
         <input type="text" id="bud-amount" inputmode="numeric" placeholder="배정예산">
         <button class="btn btn-primary btn-sm" id="bud-add">＋ 계정 추가</button>
       </div>`:""}
-      <div style="overflow:auto; max-height:60vh; margin-top:12px">
+      <div style="overflow:auto; max-height:62vh; margin-top:12px" class="budget-wrap">
         <table>
-          <thead><tr><th style="width:100px">계정코드</th><th>계정명</th><th style="width:120px">배정예산</th><th style="width:110px">누적지출</th><th style="width:110px">잔여</th>${canEdit?'<th style="width:100px"></th>':""}</tr></thead>
+          <thead><tr><th style="width:100px">계정코드</th><th>계정명</th><th style="width:120px">총예산액</th><th style="width:110px">누적지출액</th><th style="width:110px">잔여액</th>${canEdit?'<th style="width:100px"></th>':""}</tr></thead>
           <tbody id="bud-rows"></tbody>
         </table>
       </div>
@@ -4326,11 +4654,11 @@ function renderBudgetList(){
     const tr=document.createElement("tr");
     tr.dataset.code=cssId(x.code);
     const histCnt=(x.history||[]).length;
-    tr.innerHTML=`<td class="no">${esc(x.code)}</td><td>${esc(x.name)}</td>
-      <td style="font-variant-numeric:tabular-nums">${won(x.budget)}</td>
-      <td style="font-variant-numeric:tabular-nums">${won(spent)}</td>
-      <td style="font-variant-numeric:tabular-nums;${remain<0?'color:var(--void);font-weight:700':''}">${won(remain)}</td>
-      ${canEdit?`<td class="seg" style="gap:4px">
+    tr.innerHTML=`<td class="no bud-code">${esc(x.code)}</td><td class="bud-name">${esc(x.name)}</td>
+      <td class="bud-budget" data-lbl="총예산액" style="font-variant-numeric:tabular-nums">${won(x.budget)}</td>
+      <td class="bud-spent" data-lbl="누적지출액" style="font-variant-numeric:tabular-nums">${won(spent)}</td>
+      <td class="bud-remain" data-lbl="잔여액" style="font-variant-numeric:tabular-nums;${remain<0?'color:var(--void);font-weight:700':''}">${won(remain)}</td>
+      ${canEdit?`<td class="seg bud-act" style="gap:4px">
         <button class="linkbtn" data-bud-edit="${esc(x.code)}">수정</button>
         ${histCnt?`<button class="linkbtn" data-bud-hist="${esc(x.code)}">이력(${histCnt})</button>`:""}
         <button class="att-del" data-bud-del="${esc(x.code)}" title="삭제">×</button>
@@ -4933,6 +5261,1252 @@ function openAccountEdit(loginId){
 const PLACEHOLDERS = {
 };
 
+/* =========================================================
+   공지사항 / 요청게시판 / 중요자료 (각각 단독 메뉴)
+========================================================= */
+function canWriteNotice(u){ return u && ["위원장","감사1","감사2","HTML마스터"].includes(u.role); }
+function canWriteMaterial(u){ return u && ["재무분과장","위원장","감사1","감사2","사무직원","HTML마스터"].includes(u.role); }
+function fmtStamp(ts){ if(!ts) return ""; const d=new Date(ts); const p=x=>String(x).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; }
+function fmtDate(ts){ if(!ts) return ""; const d=new Date(ts); const p=x=>String(x).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+function statusChip2(s, map){
+  const m=map||{ "접수":["#eef1f6","#52607a"], "처리중":["#fff4e0","#b26a00"], "완료":["#e6f4ea","#2e7d32"], "반려":["#fdecea","#c0392b"] };
+  const c=m[s]||["#eef1f6","#52607a"]; return `<span style="background:${c[0]};color:${c[1]};padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700">${esc(s)}</span>`;
+}
+const TARGET_LABEL = { chair:"위원장", audit:"감사", etc:"기타" };
+
+/* ---------- 폐기(취소) 공통 헬퍼 (모든 게시판 공용) ---------- */
+// table: supabase 테이블명, row: 캐시객체
+function voidIsLive(r){ return !r.void_status || r.void_status==="live"; }
+function voidIsVoided(r){ return r.void_status==="void"; }
+function voidIsRequested(r){ return r.void_status==="void_requested"; }
+function voidBadge(r){
+  if(r.void_status==="void") return `<span style="background:#fdecea;color:#c0392b;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700">폐기</span>`;
+  if(r.void_status==="void_requested") return `<span style="background:#fff4e0;color:#b26a00;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700">폐기요청</span>`;
+  return "";
+}
+// 폐기 버튼 영역 HTML (작성자/마스터 권한별)
+function voidButtonsHtml(r){
+  const u=currentUser(); if(!u) return "";
+  const isMaster = u.role==="HTML마스터";
+  if(r.void_status==="void"){
+    return isMaster ? `<button class="btn btn-ghost btn-sm" data-void-restore="${r.id}" style="color:var(--ok)">↩ 폐기 복구</button>` : `<span class="muted" style="font-size:12px">폐기된 문서</span>`;
+  }
+  if(r.void_status==="void_requested"){
+    if(isMaster) return `<button class="btn btn-primary btn-sm" data-void-do="${r.id}">폐기 승인</button>
+      <button class="btn btn-ghost btn-sm" data-void-reject="${r.id}">폐기요청 반려</button>`;
+    return `<span class="muted" style="font-size:12px">폐기 요청됨 — 마스터 승인 대기${r.void_req?` (${esc(r.void_req.reason||"")})`:""}</span>`;
+  }
+  // live
+  if(isMaster) return `<button class="btn btn-ghost btn-sm" data-void-do="${r.id}" style="color:var(--void)">🗑 폐기 처리</button>`;
+  return `<button class="btn btn-ghost btn-sm" data-void-req="${r.id}" style="color:var(--void)">폐기 요청</button>`;
+}
+// 폐기 이력 HTML
+function voidHistoryHtml(r){
+  const h=r.void_history||[]; if(!h.length) return "";
+  return `<div style="margin-top:10px;border-top:1px dashed var(--line);padding-top:8px">
+    <div class="muted" style="font-size:11px;font-weight:700;margin-bottom:4px">폐기 이력</div>
+    ${h.map(e=>`<div class="muted" style="font-size:11px">· ${esc(e.at||"")} ${esc(e.text||"")}</div>`).join("")}</div>`;
+}
+// 수정 이력 (공지·중요자료 공용)
+function editHistoryHtml(r){
+  const h=r.edit_history||[]; if(!h.length) return "";
+  return `<div style="margin-top:12px;border-top:1px solid var(--line-soft);padding-top:8px">
+    <div style="font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:4px">✏️ 수정 이력 (${h.length})</div>
+    ${h.slice().reverse().map(e=>`<div style="font-size:11.5px;color:var(--ink-soft);margin-top:2px">· ${esc(e.at||"")} · ${esc(e.role||"")} ${esc(e.by||"")} — <b>${esc(e.changes||"수정")}</b></div>`).join("")}</div>`;
+}
+// 폐기 액션 (table명, id, 캐시배열) — 마스터 폐기/복구, 요청, 요청반려
+async function voidActions(table, cacheArr, sec, refresh){
+  const u=currentUser(); if(!u) return;
+  const find=id=>(cacheArr||[]).find(x=>x.id===Number(id));
+  // 마스터 즉시 폐기 (또는 요청 승인)
+  const doBtn=sec.querySelector("[data-void-do]");
+  if(doBtn) doBtn.onclick=async()=>{
+    const r=find(doBtn.dataset.voidDo); if(!r) return;
+    if(!confirm("이 문서를 폐기 처리할까요? (삭제가 아니라 폐기 보관됩니다)")) return;
+    const hist=(r.void_history||[]).concat([{at:nowStamp(), text:`[${u.role} ${u.name}] 폐기 처리`}]);
+    const { error }=await sb.from(table).update({ void_status:"void", void_history:hist }).eq("id",r.id);
+    if(error){ console.error(error); toast("폐기 실패 — 권한 확인"); return; }
+    await refresh(); toast("폐기 처리되었습니다");
+  };
+  // 폐기 복구
+  const reBtn=sec.querySelector("[data-void-restore]");
+  if(reBtn) reBtn.onclick=async()=>{
+    const r=find(reBtn.dataset.voidRestore); if(!r) return;
+    const hist=(r.void_history||[]).concat([{at:nowStamp(), text:`[${u.role} ${u.name}] 폐기 복구`}]);
+    const { error }=await sb.from(table).update({ void_status:"live", void_req:null, void_history:hist }).eq("id",r.id);
+    if(error){ console.error(error); toast("복구 실패"); return; }
+    await refresh(); toast("폐기 복구되었습니다");
+  };
+  // 폐기 요청 (작성자/일반)
+  const reqBtn=sec.querySelector("[data-void-req]");
+  if(reqBtn) reqBtn.onclick=async()=>{
+    const r=find(reqBtn.dataset.voidReq); if(!r) return;
+    const reason=prompt("폐기 요청 사유를 입력하세요:"); if(reason===null) return;
+    const hist=(r.void_history||[]).concat([{at:nowStamp(), text:`[${u.role} ${u.name}] 폐기 요청 — ${reason}`}]);
+    const { error }=await sb.from(table).update({ void_status:"void_requested", void_req:{by:u.name,role:u.role,reason,at:nowStamp()}, void_history:hist }).eq("id",r.id);
+    if(error){ console.error(error); toast("요청 실패"); return; }
+    await refresh(); toast("폐기 요청되었습니다 — 마스터 승인 대기");
+  };
+  // 폐기요청 반려 (마스터)
+  const rjBtn=sec.querySelector("[data-void-reject]");
+  if(rjBtn) rjBtn.onclick=async()=>{
+    const r=find(rjBtn.dataset.voidReject); if(!r) return;
+    const hist=(r.void_history||[]).concat([{at:nowStamp(), text:`[${u.role} ${u.name}] 폐기요청 반려`}]);
+    const { error }=await sb.from(table).update({ void_status:"live", void_req:null, void_history:hist }).eq("id",r.id);
+    if(error){ console.error(error); toast("반려 실패"); return; }
+    await refresh(); toast("폐기요청을 반려했습니다");
+  };
+}
+// 폐기 필터 버튼 HTML
+function voidFilterHtml(key, cur){
+  const opts=[["live","유효"],["void","폐기"],["all","전체"]];
+  return `<div class="seg" style="margin-bottom:10px">${opts.map(([v,l])=>`<button class="btn ${cur===v?'btn-primary':'btn-ghost'} btn-sm" data-voidf="${key}|${v}">${l}</button>`).join("")}</div>`;
+}
+function voidFilterApply(arr, mode){
+  if(mode==="void") return arr.filter(r=>r.void_status==="void"||r.void_status==="void_requested");
+  if(mode==="all") return arr;
+  return arr.filter(r=>voidIsLive(r)); // 기본: 유효
+}
+// 검색창 + 유효/폐기/전체 드롭다운 (우측) 공통 바
+function listSearchBar(key, searchId, cur, ph){
+  return `<div style="display:flex;gap:6px;flex-wrap:nowrap;align-items:center;margin-bottom:12px">
+    <input type="text" id="${searchId}" placeholder="${ph||'검색'}" value="${esc(_listSearch[key]||'')}" style="flex:1 1 0;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;box-sizing:border-box">
+    <select id="${searchId}-void" style="flex:0 0 auto;width:84px;padding:8px 4px;box-sizing:border-box">
+      <option value="live" ${cur==='live'?'selected':''}>유효</option>
+      <option value="void" ${cur==='void'?'selected':''}>폐기</option>
+      <option value="all" ${cur==='all'?'selected':''}>전체</option>
+    </select>
+  </div>`;
+}
+const _listSearch = {};   // key -> 검색어
+const _searchCol = {};    // key -> 검색 대상 열 label ("" = 전체)
+/* 검색창 + 검색범위(열) 선택 + 폐기 드롭다운 한 줄
+   colDefs: [{label, get:(row)=>문자열}]  ("전체"는 자동 포함) */
+function filterBar2(key, searchId, voidCur, ph, colDefs){
+  const curCol = (key in _searchCol) ? _searchCol[key] : "";
+  const colOpts=`<option value="" ${curCol===''?'selected':''}>전체</option>`+colDefs.map(c=>`<option value="${esc(c.label)}" ${curCol===c.label?'selected':''}>${esc(c.label)}</option>`).join("");
+  return `<div style="display:flex;gap:5px;flex-wrap:nowrap;align-items:center;margin-bottom:12px">
+    <input type="text" id="${searchId}" placeholder="${ph||'검색'}" value="${esc(_listSearch[key]||'')}" style="flex:1 1 0;min-width:0;padding:8px 9px;border:1px solid var(--line);border-radius:8px;box-sizing:border-box">
+    <select id="${searchId}-col" style="flex:0 0 auto;width:82px;padding:8px 2px;box-sizing:border-box;font-size:12px">${colOpts}</select>
+    <select id="${searchId}-void" style="flex:0 0 auto;width:66px;padding:8px 2px;box-sizing:border-box;font-size:12px">
+      <option value="live" ${voidCur==='live'?'selected':''}>유효</option>
+      <option value="void" ${voidCur==='void'?'selected':''}>폐기</option>
+      <option value="all" ${voidCur==='all'?'selected':''}>전체</option>
+    </select>
+  </div>`;
+}
+// 검색 적용: 선택 열(기본=제목=첫 colDef)에서 검색, "전체"면 모든 열
+function searchApply(key, rows, colDefs){
+  const q=(_listSearch[key]||"").trim().toLowerCase();
+  if(!q) return rows;
+  const col = (key in _searchCol) ? _searchCol[key] : "";
+  if(col){
+    const def=colDefs.find(c=>c.label===col);
+    if(def) return rows.filter(r=>String(def.get(r)||"").toLowerCase().includes(q));
+  }
+  return rows.filter(r=>colDefs.map(c=>String(c.get(r)||"")).join(" ").toLowerCase().includes(q));
+}
+// 이벤트 연결 (검색·열·폐기)
+function wireFilterBar2(sec, key, searchId, rebuild, setVoid){
+  const sr=sec.querySelector("#"+searchId);
+  if(sr) sr.oninput=()=>{ _listSearch[key]=sr.value; const v=sr.value; rebuild(); setTimeout(()=>{ const el=document.querySelector("#"+searchId); if(el){ el.focus(); el.setSelectionRange(v.length,v.length); } },0); };
+  const colSel=sec.querySelector(`#${searchId}-col`);
+  if(colSel) colSel.onchange=()=>{ _searchCol[key]=colSel.value; rebuild(); };
+  const vf=sec.querySelector(`#${searchId}-void`);
+  if(vf) vf.onchange=()=>{ setVoid(vf.value); rebuild(); };
+}
+
+
+/* ---------- 페이지네이션 헬퍼 ---------- */
+const _pgState = {};   // key -> page
+function pageSlice(key, arr, size){
+  size=size||15;
+  const total=arr.length; const pages=Math.max(1, Math.ceil(total/size));
+  let cur=_pgState[key]||1; if(cur>pages) cur=pages; _pgState[key]=cur;
+  const start=(cur-1)*size;
+  return { rows:arr.slice(start,start+size), cur, pages, total };
+}
+function pagerHtml(key, cur, pages){
+  if(pages<=1) return "";
+  let btns="";
+  for(let i=1;i<=pages;i++){ btns+=`<button class="btn ${i===cur?'btn-primary':'btn-ghost'} btn-sm" data-pg="${key}|${i}" style="min-width:32px">${i}</button>`; }
+  return `<div class="seg" style="justify-content:center;flex-wrap:wrap;gap:4px;margin-top:12px">${btns}</div>`;
+}
+function wirePager(sec, rebuild){
+  sec.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>{ const [k,i]=b.dataset.pg.split("|"); _pgState[k]=Number(i); rebuild(); });
+}
+
+/* =========================================================
+   공지사항
+========================================================= */
+let _noticeWriting=false;
+let _ntcAtts=[];          // 작성 중 첨부 [{name,url}]
+let _ntcDraft={title:"",body:""};  // 작성 중 제목·내용 보존
+let _noticeFilter="live"; // live | void | all
+let _noticeOpenId=null;
+let _ntcEditId=null;   // 수정 중인 공지 id (null=신규)
+function noticeSectionHtml(){
+  const u=currentUser();
+  const canWrite=canWriteNotice(u);
+  if(_noticeWriting && canWrite){
+    const attRows=_ntcAtts.map((a,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="flex:1">📎 ${esc(a.name)} ${a.url?`<span class="muted">(${esc(a.url)})</span>`:""}</span>
+        <button class="btn btn-ghost btn-sm" data-ntc-attrm="${i}" style="color:var(--void)">×</button>
+      </div>`).join("") || `<div class="muted" style="margin-bottom:6px">첨부 없음</div>`;
+    return `<div class="wrap-inner">
+      <button class="btn btn-ghost btn-sm" id="ntc-cancel" style="margin-bottom:10px">← 목록</button>
+      <div class="card" style="border:1px solid var(--brand)">
+        <div style="font-weight:700;margin-bottom:10px">📢 공지 ${_ntcEditId?"수정":"작성"}</div>
+        <div class="field"><label>제목</label><input type="text" id="ntc-title" placeholder="제목" value="${esc(_ntcDraft.title||'')}"></div>
+        <div class="field"><label>내용</label>
+          <textarea id="ntc-body" rows="14" placeholder="공지 내용을 작성하세요" style="width:100%;box-sizing:border-box;font-size:14.5px;line-height:1.8;min-height:320px">${esc(_ntcDraft.body||'')}</textarea></div>
+        <div style="margin:12px 0 6px;font-weight:700">📎 첨부 (파일명 + 링크)</div>
+        ${attRows}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <input type="text" id="ntc-att-name" placeholder="파일명 (예: 총회공고.pdf)" style="flex:1;min-width:140px">
+          <input type="text" id="ntc-att-url" placeholder="링크 URL" style="flex:1;min-width:140px">
+          <button class="btn btn-ghost btn-sm" id="ntc-att-add">+ 첨부 추가</button>
+        </div>
+        <button class="btn btn-primary" id="ntc-add" style="width:100%;margin-top:14px">공지 ${_ntcEditId?"수정 저장":"등록"}</button>
+      </div></div>`;
+  }
+  // 상세 열람
+  if(_noticeOpenId){
+    const n=(_cache.notices||[]).find(x=>x.id===_noticeOpenId);
+    if(n){
+      const atts=(n.attachments||[]).map(a=>`<div style="padding:6px 0;border-top:1px solid var(--line-soft)">📎 ${a.url?`<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline">${esc(a.name)}</a>`:esc(a.name)}</div>`).join("") || `<div class="muted" style="padding:6px 0">첨부 없음</div>`;
+      return `<div class="wrap-inner">
+        <button class="btn btn-ghost btn-sm" id="ntc-back" style="margin-bottom:10px">← 목록</button>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+            <div style="font-weight:700;font-size:17px;color:var(--brand)">${esc(n.title)} ${voidBadge(n)}</div>
+            <div style="flex:0 0 auto;display:flex;gap:4px">${(u && (u.name===n.by_name || u.role==="HTML마스터") && n.void_status!=="void")?`<button class="btn btn-ghost btn-sm" id="ntc-edit" data-id="${n.id}">✏️ 수정</button>`:""}${voidButtonsHtml(n)}</div>
+          </div>
+          <div class="muted" style="font-size:12px;margin:4px 0 12px">${esc(n.by_role||"")} ${esc(n.by_name||"")} · ${fmtStamp(n.created_at)}</div>
+          <div style="white-space:pre-wrap;font-size:14px;line-height:1.7">${esc(n.body||"")}</div>
+          <div style="font-weight:700;margin:14px 0 4px">📎 첨부</div>
+          ${atts}
+          ${editHistoryHtml(n)}
+          ${voidHistoryHtml(n)}
+        </div>
+      </div>`;
+    }
+    _noticeOpenId=null;
+  }
+  // 목록
+  let allRaw=_cache.notices||[];
+  const NTC_COLS=[
+    {label:"제목", get:n=>`${n.title||""} ${n.body||""}`},
+    {label:"작성자", get:n=>n.by_name||""},
+    {label:"일자", get:n=>(n.created_at||"").slice(0,10)}
+  ];
+  allRaw=searchApply("notice", allRaw, NTC_COLS);
+  const all=voidFilterApply(allRaw, _noticeFilter);
+  const { rows:pageRows, cur, pages } = pageSlice("notice", all, 15);
+  const rows = pageRows.length ? pageRows.map(n=>{
+    const acnt=(n.attachments||[]).length;
+    return `<tr data-ntc-open="${n.id}" style="cursor:pointer;${n.void_status==='void'?'opacity:.55':''}">
+      <td style="white-space:nowrap">${(n.created_at||"").slice(0,10)}</td>
+      <td class="bcard-title">${esc(n.title)} ${acnt?`<span class="muted">📎${acnt}</span>`:""} ${voidBadge(n)}</td>
+      <td style="white-space:nowrap">${esc(n.by_name||"")}</td>
+    </tr>`; }).join("") : `<tr><td colspan="3" class="empty">공지가 없습니다.</td></tr>`;
+  const writeBtn = canWrite ? `<button class="btn btn-primary btn-sm" id="ntc-write">✍️ 공지 작성</button>` : "";
+  return `<div class="wrap-inner">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px">
+      <h2 style="margin:0">📢 공지사항</h2>${writeBtn}
+    </div>
+    ${filterBar2("notice","ntc-search",_noticeFilter,"검색",NTC_COLS)}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:96px">일자</th><th>제목</th><th style="width:90px">작성자</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${pagerHtml("notice", cur, pages)}
+  </div>`;
+}
+function wireNoticeSection(){
+  const sec=document.getElementById("section-notice"); if(!sec) return;
+  const u=currentUser();
+  const rebuild=()=>{ buildSection("notice"); showTop("notice"); };
+  const refresh=async()=>{ await loadAllFromSupabase(); rebuild(); };
+  wirePager(sec, rebuild);
+  // 검색 + 2단 필터 + 폐기 드롭다운
+  wireFilterBar2(sec, "notice", "ntc-search", ()=>{ _pgState["notice"]=1; rebuild(); }, (v)=>{ _noticeFilter=v; });
+  // 행 클릭 → 상세
+  sec.querySelectorAll("[data-ntc-open]").forEach(tr=>tr.onclick=()=>{ _noticeOpenId=Number(tr.dataset.ntcOpen); rebuild(); });
+  const back=sec.querySelector("#ntc-back"); if(back) back.onclick=()=>{ _noticeOpenId=null; rebuild(); };
+  // 수정 진입
+  const edit=sec.querySelector("#ntc-edit");
+  if(edit) edit.onclick=()=>{
+    const n=(_cache.notices||[]).find(x=>x.id===Number(edit.dataset.id)); if(!n) return;
+    _ntcEditId=n.id; _noticeWriting=true; _noticeOpenId=null;
+    _ntcDraft={title:n.title||"", body:n.body||""}; _ntcAtts=(n.attachments||[]).map(a=>({name:a.name,url:a.url}));
+    rebuild();
+  };
+  voidActions("notices", _cache.notices, sec, async()=>{ _noticeOpenId=null; await refresh(); });
+  const w=sec.querySelector("#ntc-write"); if(w) w.onclick=()=>{ _noticeWriting=true; _ntcEditId=null; _ntcAtts=[]; _ntcDraft={title:"",body:""}; rebuild(); };
+  const c=sec.querySelector("#ntc-cancel"); if(c) c.onclick=()=>{ _noticeWriting=false; _ntcEditId=null; _ntcDraft={title:"",body:""}; rebuild(); };
+  const keepDraft=()=>{ const t=sec.querySelector("#ntc-title"), b=sec.querySelector("#ntc-body"); if(t) _ntcDraft.title=t.value; if(b) _ntcDraft.body=b.value; };
+  const aadd=sec.querySelector("#ntc-att-add");
+  if(aadd) aadd.onclick=()=>{
+    keepDraft();
+    const name=sec.querySelector("#ntc-att-name").value.trim();
+    const url=sec.querySelector("#ntc-att-url").value.trim();
+    if(!name){ toast("파일명을 입력하세요"); return; }
+    _ntcAtts.push({name,url}); rebuild();
+  };
+  sec.querySelectorAll("[data-ntc-attrm]").forEach(b=>b.onclick=()=>{ keepDraft(); _ntcAtts.splice(+b.dataset.ntcAttrm,1); rebuild(); });
+  const add=sec.querySelector("#ntc-add");
+  if(add) add.onclick=async()=>{
+    const title=sec.querySelector("#ntc-title").value.trim();
+    const body=sec.querySelector("#ntc-body").value.trim();
+    if(!title){ toast("제목을 입력하세요"); return; }
+    add.disabled=true; add.textContent=_ntcEditId?"저장 중…":"등록 중…";
+    let error;
+    if(_ntcEditId){
+      const prev=(_cache.notices||[]).find(x=>x.id===_ntcEditId)||{};
+      const changes=[];
+      if((prev.title||"")!==title) changes.push("제목");
+      if((prev.body||"")!==body) changes.push("내용");
+      const prevAttN=(prev.attachments||[]).length, newAttN=_ntcAtts.length;
+      if(JSON.stringify(prev.attachments||[])!==JSON.stringify(_ntcAtts)) changes.push(`첨부(${prevAttN}→${newAttN})`);
+      const hist=(prev.edit_history||[]).concat([{ by:u.name, role:u.role, at:nowStamp(), changes: changes.length?changes.join(", "):"내용 변경 없음" }]);
+      ({ error } = await sb.from("notices").update({ title, body, attachments:_ntcAtts, edit_history:hist }).eq("id",_ntcEditId));
+    }else{
+      ({ error } = await sb.from("notices").insert([{ title, body, attachments:_ntcAtts, by_name:u.name, by_role:u.role }]));
+    }
+    add.disabled=false;
+    if(error){ console.error(error); toast(_ntcEditId?"수정 실패":"등록 실패 — 권한을 확인하세요"); return; }
+    const wasEdit=_ntcEditId;
+    _noticeWriting=false; _ntcEditId=null; _ntcDraft={title:"",body:""};
+    await refresh(); toast(wasEdit?"공지가 수정되었습니다":"공지가 등록되었습니다");
+  };
+}
+
+
+/* =========================================================
+   요청게시판 (기안형: 번호·상태·대상자·집행탭·댓글)
+========================================================= */
+let _rqMode="list";      // list | write | view
+let _rqOpenId=null;
+let _rqSub="list";       // list | exec
+let _rqFilter="전체";
+let _rqVoidFilter="live";
+const RQ_STATUS=["접수","진행중","답변완료","보류","완료"];
+const RQ_STATUS_COLOR={ "접수":["#eef1f6","#52607a"], "진행중":["#fff4e0","#b26a00"], "답변완료":["#e3f0ff","#1d6fd6"], "보류":["#fff8d6","#9a7d00"], "완료":["#e6f4ea","#2e7d32"] };
+
+function requestSectionHtml(){
+  if(_rqMode==="write") return rqWriteHtml();
+  if(_rqMode==="view" && _rqOpenId) return rqViewHtml();
+  const tabs=`<div class="seg" style="margin:8px 0 14px">
+    <button class="btn ${_rqSub==='list'?'btn-primary':'btn-ghost'} btn-sm" data-rq-sub="list">목록</button>
+    <button class="btn ${_rqSub==='exec'?'btn-primary':'btn-ghost'} btn-sm" data-rq-sub="exec">집행</button>
+  </div>`;
+  return `<div class="wrap-inner">${tabs}${ _rqSub==="exec" ? rqExecHtml() : rqListHtml() }</div>`;
+}
+function rqListHtml(){
+  let allRaw=_cache.requests||[];
+  const RQ_COLS=[
+    {label:"제목", get:r=>r.title||""},
+    {label:"번호", get:r=>r.doc_no||""},
+    {label:"요청자", get:r=>r.by_name||""},
+    {label:"상태", get:r=>r.status||""},
+    {label:"대상자", get:r=>TARGET_LABEL[r.target]||"기타"},
+    {label:"일자", get:r=>(r.created_at||"").slice(0,10)}
+  ];
+  allRaw=searchApply("request", allRaw, RQ_COLS);
+  const all=voidFilterApply(allRaw, _rqVoidFilter);
+  const { rows:pageRows, cur, pages } = pageSlice("request", all, 15);
+  const rows = pageRows.length ? pageRows.map(r=>`<tr data-rq-open="${r.id}" style="cursor:pointer;${r.void_status==='void'?'opacity:.55':''}">
+      <td style="white-space:nowrap">${(r.created_at||"").slice(0,10)}</td>
+      <td style="white-space:nowrap">${esc(r.doc_no||"")}</td>
+      <td class="bcard-title">${esc(r.title||"")} ${voidBadge(r)}</td>
+      <td style="white-space:nowrap">${esc(r.by_name||"")}</td>
+      <td class="col-gdstatus" style="white-space:nowrap">${statusChip2(r.status, RQ_STATUS_COLOR)}</td>
+      <td style="white-space:nowrap">${esc(TARGET_LABEL[r.target]||"기타")}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">등록된 요청이 없습니다.</td></tr>`;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="muted" style="font-size:13px">요청게시판 (총 ${all.length}건)</div>
+      <button class="btn btn-primary btn-sm" id="rq-write">✍️ 글쓰기 (새 요청)</button>
+    </div>
+    ${filterBar2("request","rq-search",_rqVoidFilter,"검색",RQ_COLS)}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:96px">일자</th><th style="width:120px">번호</th><th>제목</th><th style="width:80px">요청자</th><th style="width:60px">상태</th><th style="width:70px">대상자</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${pagerHtml("request", cur, pages)}`;
+}
+function rqExecHtml(){
+  const all=_cache.requests||[];
+  const filters=["전체"].concat(RQ_STATUS);
+  const list=_rqFilter==="전체"?all:all.filter(r=>r.status===_rqFilter);
+  const cnt=(s)=> s==="전체"?all.length:all.filter(r=>r.status===s).length;
+  const fsel=`<div style="margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <label style="font-size:13px;color:var(--ink-soft)">상태</label>
+      <select id="rq-filter-sel" style="min-width:160px">${filters.map(f=>`<option value="${f}" ${_rqFilter===f?'selected':''}>${f} (${cnt(f)})</option>`).join("")}</select>
+    </div>`;
+  const { rows:pageRows, cur, pages } = pageSlice("requestExec", list, 15);
+  const rows = pageRows.length ? pageRows.map(r=>`<tr data-rq-open="${r.id}" style="cursor:pointer">
+      <td style="white-space:nowrap">${(r.created_at||"").slice(0,10)}</td>
+      <td style="white-space:nowrap">${esc(r.doc_no||"")}</td>
+      <td class="bcard-title">${esc(r.title||"")}</td>
+      <td style="white-space:nowrap">${esc(r.by_name||"")}</td>
+      <td style="white-space:nowrap">${statusChip2(r.status, RQ_STATUS_COLOR)}</td>
+      <td style="white-space:nowrap">${esc(TARGET_LABEL[r.target]||"기타")}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">해당 상태의 요청이 없습니다.</td></tr>`;
+  return `${fsel}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:96px">일자</th><th style="width:120px">번호</th><th>제목</th><th style="width:80px">요청자</th><th style="width:60px">상태</th><th style="width:70px">대상자</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${pagerHtml("requestExec", cur, pages)}`;
+}
+function rqWriteHtml(){
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="rq-cancel" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:12px">✍️ 새 요청 작성</div>
+      <div class="field"><label>제목</label><input type="text" id="rq-title" placeholder="요청 제목"></div>
+      <div class="field"><label>요청 대상자</label>
+        <select id="rq-target">
+          <option value="chair">위원장</option>
+          <option value="audit">감사</option>
+          <option value="etc" selected>기타</option>
+        </select></div>
+      <div class="field"><label>요청 내용</label>
+        <textarea id="rq-body" rows="8" placeholder="요청 내용을 자세히 작성하세요" style="width:100%;box-sizing:border-box;font-size:14px;line-height:1.7"></textarea></div>
+      <div class="muted" style="font-size:12px;margin-bottom:8px">요청일은 작성일로 자동 기록됩니다.</div>
+      <button class="btn btn-primary" id="rq-submit" style="width:100%">요청 등록</button>
+    </div>
+  </div>`;
+}
+function rqViewHtml(){
+  const u=currentUser();
+  const r=(_cache.requests||[]).find(x=>x.id===_rqOpenId);
+  if(!r){ _rqMode="list"; return rqListHtml(); }
+  const cmts=(_cache.comments||[]).filter(c=>c.board==="request" && c.ref_id===r.id);
+  const isOwner = u && (u.login_id===r.by_login);
+  const isResponder = u && ((r.target==="chair" && u.role==="위원장") || (r.target==="audit" && ["감사1","감사2"].includes(u.role)));
+  const isMasterU = u && u.role==="HTML마스터";
+  const canStatus = isOwner || isResponder || isMasterU;   // 상태 변경 권한
+  const canDelReq = isOwner || isMasterU;
+
+  // 상태 변경 버튼 (완료는 질문자/마스터만)
+  const statusSel = canStatus ? `<div style="margin-top:10px">
+      <div class="muted" style="font-size:12px;margin-bottom:4px">상태 변경</div>
+      <div class="seg" style="flex-wrap:wrap">
+      ${RQ_STATUS.map(s=>{
+        if(s==="완료" && !(isOwner||isMasterU)) return "";   // 완료는 질문자만
+        return `<button class="btn ${r.status===s?'btn-primary':'btn-ghost'} btn-sm" data-rq-status="${r.id}|${s}">${s}</button>`;
+      }).join("")}
+      </div></div>` : "";
+
+  // 추가 기재 누적글
+  const addenda=(r.addenda||[]);
+  const addendaHtml = addenda.length ? addenda.map((a,i)=>`<div style="border-left:3px solid var(--brand);padding:8px 12px;margin-top:8px;background:#fafbfd;border-radius:0 8px 8px 0">
+      <div class="muted" style="font-size:11.5px;margin-bottom:3px">➕ ${esc(a.role||"")} ${esc(a.by||"")} · ${esc(a.at||"")}</div>
+      <div style="white-space:pre-wrap;font-size:13.5px;line-height:1.6">${esc(a.text||"")}</div>
+    </div>`).join("") : "";
+  const canAddenda = isOwner || isResponder || isMasterU;
+  const addendaBox = canAddenda ? `<div style="margin-top:12px">
+      <textarea id="rq-addenda" rows="2" placeholder="추가 내용을 기재하면 이력으로 누적됩니다" style="width:100%;box-sizing:border-box"></textarea>
+      <button class="btn btn-ghost btn-sm" id="rq-addenda-add" style="margin-top:6px">➕ 추가 기재</button>
+    </div>` : "";
+
+  // 상태 변경 이력
+  const hist=(r.status_history||[]);
+  const histHtml = hist.length ? `<details style="margin-top:10px"><summary style="cursor:pointer;font-size:12px;color:var(--ink-soft)">상태 변경 이력 (${hist.length})</summary>
+      <div style="margin-top:6px">${hist.slice().reverse().map(h=>`<div style="font-size:11.5px;color:var(--ink-soft);margin-top:2px">· ${esc(h.at)} · ${esc(h.by)} — ${h.from?`${esc(h.from)} → `:""}<b>${esc(h.to)}</b></div>`).join("")}</div>
+    </details>` : "";
+
+  // 댓글 + 대댓글 (1단계)
+  const parents=cmts.filter(c=>!c.parent_id);
+  const childrenOf=(pid)=>cmts.filter(c=>c.parent_id===pid).sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at)));
+  const cmtBlock=(c, isChild)=>{
+    const canDelC = u && (u.login_id===c.by_login || isMasterU);
+    const respTag = ((r.target==="chair" && c.by_role==="위원장")||(r.target==="audit" && ["감사1","감사2"].includes(c.by_role))) ? `<span style="background:#e3f0ff;color:#1d6fd6;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px;margin-left:4px">답변</span>` : "";
+    return `<div style="border-top:1px solid var(--line-soft);padding:8px 0;${isChild?'margin-left:20px;border-left:2px solid var(--line);padding-left:10px':''}">
+      <div style="display:flex;justify-content:space-between;gap:8px">
+        <span class="muted" style="font-size:12px">${esc(c.by_role||"")} ${esc(c.by_name||"")}${respTag} · ${fmtStamp(c.created_at)}</span>
+        ${canDelC?`<button class="btn btn-ghost btn-sm" data-rqc-del="${c.id}" style="color:var(--void);padding:0 6px">×</button>`:""}
+      </div>
+      <div style="white-space:pre-wrap;font-size:13px;margin-top:2px">${esc(c.body||"")}</div>
+      ${!isChild?`<button class="btn btn-ghost btn-sm" data-rqc-reply="${c.id}" style="margin-top:4px;font-size:11px;padding:2px 8px">↳ 답글</button>
+        <div id="rqc-replybox-${c.id}" style="display:none;margin-top:6px;margin-left:20px">
+          <textarea id="rqc-replytext-${c.id}" rows="2" placeholder="대댓글" style="width:100%;box-sizing:border-box"></textarea>
+          <button class="btn btn-primary btn-sm" data-rqc-replysend="${c.id}" style="margin-top:4px">등록</button>
+        </div>`:""}
+    </div>`;
+  };
+  const cmtRows = parents.length ? parents.map(c=>cmtBlock(c,false)+childrenOf(c.id).map(ch=>cmtBlock(ch,true)).join("")).join("") : `<div class="muted" style="padding:8px 0">아직 답글이 없습니다.</div>`;
+
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="rq-back" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+        <div style="font-weight:700;font-size:17px">${esc(r.title||"")}</div>
+        <div style="flex:0 0 auto;display:flex;gap:4px">${voidButtonsHtml(r)}</div>
+      </div>
+      <div class="muted" style="font-size:12px;margin:4px 0 8px">${esc(r.doc_no||"")} · 요청자 ${esc(r.by_name||"")} (${esc(r.by_role||"")}) · 요청일 ${fmtDate(r.created_at)}</div>
+      <div style="margin-bottom:10px">${statusChip2(r.status, RQ_STATUS_COLOR)} ${voidBadge(r)} <span style="font-size:12.5px;color:var(--ink-soft);margin-left:6px">대상자: <b>${esc(TARGET_LABEL[r.target]||"기타")}</b></span></div>
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.8;padding:12px;background:var(--line-soft);border-radius:8px">${esc(r.body||"")}</div>
+      ${addendaHtml}
+      ${addendaBox}
+      ${statusSel}
+      ${histHtml}
+      ${voidHistoryHtml(r)}
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:8px">답글 ${cmts.length}</div>
+      ${cmtRows}
+      <div style="margin-top:12px">
+        <textarea id="rqc-body" rows="2" placeholder="답글을 입력하세요" style="width:100%;box-sizing:border-box"></textarea>
+        <button class="btn btn-primary btn-sm" id="rqc-add" style="margin-top:6px">답글 등록</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wireRequestSection(){
+  const sec=document.getElementById("section-request"); if(!sec) return;
+  const u=currentUser();
+  const rebuild=()=>{ buildSection("request"); showTop("request"); };
+  const refresh=async()=>{ await loadAllFromSupabase(); rebuild(); };
+  wirePager(sec, rebuild);
+  wireFilterBar2(sec, "request", "rq-search", ()=>{ _pgState["request"]=1; rebuild(); }, (v)=>{ _rqVoidFilter=v; });
+  sec.querySelectorAll("[data-rq-sub]").forEach(b=>b.onclick=()=>{ _rqSub=b.dataset.rqSub; rebuild(); });
+  const rqfs=sec.querySelector("#rq-filter-sel"); if(rqfs) rqfs.onchange=()=>{ _rqFilter=rqfs.value; _pgState["requestExec"]=1; rebuild(); };
+  sec.querySelectorAll("[data-rq-open]").forEach(tr=>tr.onclick=()=>{ _rqOpenId=Number(tr.dataset.rqOpen); _rqMode="view"; rebuild(); });
+  const w=sec.querySelector("#rq-write"); if(w) w.onclick=()=>{ _rqMode="write"; rebuild(); };
+  const c=sec.querySelector("#rq-cancel"); if(c) c.onclick=()=>{ _rqMode="list"; rebuild(); };
+  const back=sec.querySelector("#rq-back"); if(back) back.onclick=()=>{ _rqMode="list"; _rqOpenId=null; rebuild(); };
+
+  const submit=sec.querySelector("#rq-submit");
+  if(submit) submit.onclick=async()=>{
+    const title=sec.querySelector("#rq-title").value.trim();
+    const body=sec.querySelector("#rq-body").value.trim();
+    const target=sec.querySelector("#rq-target").value;
+    if(!title){ toast("제목을 입력하세요"); return; }
+    const yr=new Date().getFullYear();
+    const cnt=(_cache.requests||[]).filter(r=>(r.doc_no||"").indexOf(`요청-${yr}-`)===0).length;
+    const doc_no=`요청-${yr}-${String(cnt+1).padStart(4,"0")}`;
+    submit.disabled=true; submit.textContent="등록 중…";
+    const { error }=await sb.from("requests").insert([{ doc_no, title, body, target, status:"접수", by_name:u.name, by_role:u.role, by_login:u.login_id }]);
+    submit.disabled=false; submit.textContent="요청 등록";
+    if(error){ console.error(error); toast("등록 실패"); return; }
+    _rqMode="list"; await refresh(); toast("요청이 등록되었습니다");
+  };
+  // 상태 변경 (이력 기록)
+  sec.querySelectorAll("[data-rq-status]").forEach(b=>b.onclick=async()=>{
+    const [id,st]=b.dataset.rqStatus.split("|");
+    const r=(_cache.requests||[]).find(x=>x.id===Number(id)); if(!r) return;
+    if(r.status===st) return;
+    const hist=(r.status_history||[]).concat([{ by:u.name, role:u.role, at:nowStamp(), from:r.status, to:st }]);
+    const { error }=await sb.from("requests").update({ status:st, status_history:hist }).eq("id",Number(id));
+    if(error){ console.error(error); toast("변경 실패"); return; }
+    await refresh(); toast(`상태: ${st}`);
+  });
+  // 추가 기재 (누적)
+  const aadd=sec.querySelector("#rq-addenda-add");
+  if(aadd) aadd.onclick=async()=>{
+    const txt=sec.querySelector("#rq-addenda").value.trim();
+    if(!txt){ toast("추가 내용을 입력하세요"); return; }
+    const r=(_cache.requests||[]).find(x=>x.id===_rqOpenId); if(!r) return;
+    const arr=(r.addenda||[]).concat([{ by:u.name, role:u.role, at:nowStamp(), text:txt }]);
+    aadd.disabled=true; aadd.textContent="등록 중…";
+    const { error }=await sb.from("requests").update({ addenda:arr }).eq("id",_rqOpenId);
+    aadd.disabled=false; aadd.textContent="➕ 추가 기재";
+    if(error){ console.error(error); toast("등록 실패"); return; }
+    await refresh(); toast("추가 내용이 기재되었습니다");
+  };
+  // 대댓글 토글
+  sec.querySelectorAll("[data-rqc-reply]").forEach(b=>b.onclick=()=>{
+    const box=sec.querySelector(`#rqc-replybox-${b.dataset.rqcReply}`);
+    if(box) box.style.display = box.style.display==="none" ? "block" : "none";
+  });
+  // 대댓글 등록
+  sec.querySelectorAll("[data-rqc-replysend]").forEach(b=>b.onclick=async()=>{
+    const pid=Number(b.dataset.rqcReplysend);
+    const txt=sec.querySelector(`#rqc-replytext-${pid}`).value.trim();
+    if(!txt){ toast("내용을 입력하세요"); return; }
+    b.disabled=true;
+    const { error }=await sb.from("comments").insert([{ board:"request", ref_id:_rqOpenId, parent_id:pid, body:txt, by_name:u.name, by_role:u.role, by_login:u.login_id }]);
+    b.disabled=false;
+    if(error){ console.error(error); toast("등록 실패"); return; }
+    await refresh();
+  });
+  // 폐기 (삭제 대체)
+  voidActions("requests", _cache.requests, sec, async()=>{ _rqMode="list"; _rqOpenId=null; await refresh(); });
+  // 답글
+  const cadd=sec.querySelector("#rqc-add");
+  if(cadd) cadd.onclick=async()=>{
+    const body=sec.querySelector("#rqc-body").value.trim();
+    if(!body){ toast("답글 내용을 입력하세요"); return; }
+    cadd.disabled=true; cadd.textContent="등록 중…";
+    const { error }=await sb.from("comments").insert([{ board:"request", ref_id:_rqOpenId, post_id:null, body, by_name:u.name, by_role:u.role, by_login:u.login_id }]);
+    cadd.disabled=false; cadd.textContent="답글 등록";
+    if(error){ console.error(error); toast("등록 실패"); return; }
+    await refresh();
+  };
+  sec.querySelectorAll("[data-rqc-del]").forEach(b=>b.onclick=async()=>{
+    const { error }=await sb.from("comments").delete().eq("id",Number(b.dataset.rqcDel));
+    if(error){ console.error(error); toast("삭제 실패"); return; }
+    await refresh();
+  });
+}
+
+/* =========================================================
+   중요자료 (제목+내용+첨부[파일명+링크])
+========================================================= */
+let _mtMode="list";   // list | write | view
+let _mtVoidFilter="live";
+let _mtOpenId=null;
+let _mtAtts=[];        // 작성 중 첨부 [{name,url}]
+let _mtDraft={title:"",body:""};  // 작성 중 보존
+let _mtEditId=null;   // 수정 중 id
+function materialSectionHtml(){
+  if(_mtMode==="write") return mtWriteHtml();
+  if(_mtMode==="view" && _mtOpenId) return mtViewHtml();
+  return `<div class="wrap-inner">${mtListHtml()}</div>`;
+}
+function mtListHtml(){
+  const u=currentUser();
+  const canWrite=canWriteMaterial(u);
+  let raw=_cache.materials||[];
+  const MT_COLS=[
+    {label:"제목", get:m=>`${m.title||""} ${m.body||""}`},
+    {label:"등록자", get:m=>m.by_name||""},
+    {label:"일자", get:m=>(m.created_at||"").slice(0,10)}
+  ];
+  raw=searchApply("material", raw, MT_COLS);
+  const all=voidFilterApply(raw, _mtVoidFilter);
+  const { rows:pageRows, cur, pages } = pageSlice("material", all, 15);
+  const rows = pageRows.length ? pageRows.map(m=>{
+    const acnt=(m.attachments||[]).length;
+    return `<tr data-mt-open="${m.id}" style="cursor:pointer;${m.void_status==='void'?'opacity:.55':''}">
+      <td style="white-space:nowrap">${(m.created_at||"").slice(0,10)}</td>
+      <td class="bcard-title">${esc(m.title||"")} ${acnt?`<span class="muted">📎${acnt}</span>`:""} ${voidBadge(m)}</td>
+      <td style="white-space:nowrap">${esc(m.by_name||"")}</td>
+    </tr>`; }).join("") : `<tr><td colspan="3" class="empty">등록된 자료가 없습니다.</td></tr>`;
+  const writeBtn = canWrite ? `<button class="btn btn-primary btn-sm" id="mt-write">✍️ 자료 등록</button>` : "";
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px">
+      <h2 style="margin:0">📁 중요자료</h2>${writeBtn}
+    </div>
+    ${filterBar2("material","mt-search",_mtVoidFilter,"검색",MT_COLS)}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:96px">일자</th><th>제목</th><th style="width:90px">등록자</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${pagerHtml("material", cur, pages)}`;
+}
+function mtWriteHtml(){
+  const attRows=_mtAtts.map((a,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span style="flex:1">📎 ${esc(a.name)} ${a.url?`<span class="muted">(${esc(a.url)})</span>`:""}</span>
+      <button class="btn btn-ghost btn-sm" data-mt-attrm="${i}" style="color:var(--void)">×</button>
+    </div>`).join("") || `<div class="muted" style="margin-bottom:6px">첨부 없음</div>`;
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="mt-cancel" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:12px">✍️ 중요자료 ${_mtEditId?"수정":"등록"}</div>
+      <div class="field"><label>제목</label><input type="text" id="mt-title" placeholder="자료 제목" value="${esc(_mtDraft.title||'')}"></div>
+      <div class="field"><label>내용</label><textarea id="mt-body" rows="5" placeholder="설명" style="width:100%;box-sizing:border-box">${esc(_mtDraft.body||'')}</textarea></div>
+      <div style="margin:12px 0 6px;font-weight:700">📎 첨부 (파일명 + 링크)</div>
+      ${attRows}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <input type="text" id="mt-att-name" placeholder="파일명 (예: 총회자료.pdf)" style="flex:1;min-width:140px">
+        <input type="text" id="mt-att-url" placeholder="링크 URL (드라이브/공유)" style="flex:1;min-width:140px">
+        <button class="btn btn-ghost btn-sm" id="mt-att-add">+ 첨부 추가</button>
+      </div>
+      <button class="btn btn-primary" id="mt-submit" style="width:100%;margin-top:14px">자료 ${_mtEditId?"수정 저장":"등록"}</button>
+    </div>
+  </div>`;
+}
+function mtViewHtml(){
+  const u=currentUser();
+  const m=(_cache.materials||[]).find(x=>x.id===_mtOpenId);
+  if(!m){ _mtMode="list"; return mtListHtml(); }
+  const atts=(m.attachments||[]).map(a=>`<div style="padding:6px 0;border-top:1px solid var(--line-soft)">
+      📎 ${a.url?`<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--brand);text-decoration:underline">${esc(a.name)}</a>`:esc(a.name)}
+    </div>`).join("") || `<div class="muted" style="padding:6px 0">첨부 없음</div>`;
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="mt-back" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+        <div style="font-weight:700;font-size:17px">${esc(m.title||"")} ${voidBadge(m)}</div>
+        <div style="flex:0 0 auto;display:flex;gap:4px">${(u && (u.name===m.by_name || u.role==="HTML마스터") && m.void_status!=="void")?`<button class="btn btn-ghost btn-sm" id="mt-edit" data-id="${m.id}">✏️ 수정</button>`:""}${voidButtonsHtml(m)}</div>
+      </div>
+      <div class="muted" style="font-size:12px;margin:4px 0 12px">등록자 ${esc(m.by_name||"")} (${esc(m.by_role||"")}) · ${fmtDate(m.created_at)}</div>
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.7">${esc(m.body||"")}</div>
+      <div style="font-weight:700;margin:14px 0 4px">📎 첨부</div>
+      ${atts}
+      ${editHistoryHtml(m)}
+      ${voidHistoryHtml(m)}
+    </div>
+  </div>`;
+}
+function wireMaterialSection(){
+  const sec=document.getElementById("section-material"); if(!sec) return;
+  const u=currentUser();
+  const rebuild=()=>{ buildSection("material"); showTop("material"); };
+  const refresh=async()=>{ await loadAllFromSupabase(); rebuild(); };
+  wirePager(sec, rebuild);
+  wireFilterBar2(sec, "material", "mt-search", ()=>{ _pgState["material"]=1; rebuild(); }, (v)=>{ _mtVoidFilter=v; });
+  sec.querySelectorAll("[data-mt-open]").forEach(tr=>tr.onclick=()=>{ _mtOpenId=Number(tr.dataset.mtOpen); _mtMode="view"; rebuild(); });
+  const w=sec.querySelector("#mt-write"); if(w) w.onclick=()=>{ _mtMode="write"; _mtEditId=null; _mtAtts=[]; _mtDraft={title:"",body:""}; rebuild(); };
+  const c=sec.querySelector("#mt-cancel"); if(c) c.onclick=()=>{ _mtMode="list"; _mtEditId=null; _mtDraft={title:"",body:""}; rebuild(); };
+  const back=sec.querySelector("#mt-back"); if(back) back.onclick=()=>{ _mtMode="list"; _mtOpenId=null; rebuild(); };
+  // 수정 진입
+  const edit=sec.querySelector("#mt-edit");
+  if(edit) edit.onclick=()=>{
+    const m=(_cache.materials||[]).find(x=>x.id===Number(edit.dataset.id)); if(!m) return;
+    _mtEditId=m.id; _mtMode="write"; _mtOpenId=null;
+    _mtDraft={title:m.title||"", body:m.body||""}; _mtAtts=(m.attachments||[]).map(a=>({name:a.name,url:a.url}));
+    rebuild();
+  };
+  // 작성 중 입력 보존
+  const keepMt=()=>{ const t=sec.querySelector("#mt-title"), b=sec.querySelector("#mt-body"); if(t) _mtDraft.title=t.value; if(b) _mtDraft.body=b.value; };
+  // 첨부 추가/삭제 (작성 중)
+  const aadd=sec.querySelector("#mt-att-add");
+  if(aadd) aadd.onclick=()=>{
+    keepMt();
+    const name=sec.querySelector("#mt-att-name").value.trim();
+    const url=sec.querySelector("#mt-att-url").value.trim();
+    if(!name){ toast("파일명을 입력하세요"); return; }
+    _mtAtts.push({ name, url }); rebuild();
+  };
+  sec.querySelectorAll("[data-mt-attrm]").forEach(b=>b.onclick=()=>{ keepMt(); _mtAtts.splice(+b.dataset.mtAttrm,1); rebuild(); });
+  const submit=sec.querySelector("#mt-submit");
+  if(submit) submit.onclick=async()=>{
+    const title=sec.querySelector("#mt-title").value.trim();
+    const body=sec.querySelector("#mt-body").value.trim();
+    if(!title){ toast("제목을 입력하세요"); return; }
+    submit.disabled=true; submit.textContent=_mtEditId?"저장 중…":"등록 중…";
+    let error;
+    if(_mtEditId){
+      const prev=(_cache.materials||[]).find(x=>x.id===_mtEditId)||{};
+      const changes=[];
+      if((prev.title||"")!==title) changes.push(`제목: "${(prev.title||"").slice(0,20)}" → "${title.slice(0,20)}"`);
+      if((prev.body||"")!==body){
+        const pl=(prev.body||"").length, nl=body.length;
+        changes.push(`내용 변경 (${pl}자→${nl}자)`);
+      }
+      const prevAtt=(prev.attachments||[]).map(a=>a.name), newAtt=_mtAtts.map(a=>a.name);
+      const added=newAtt.filter(n=>!prevAtt.includes(n));
+      const removed=prevAtt.filter(n=>!newAtt.includes(n));
+      if(added.length) changes.push(`첨부 추가: ${added.join(", ")}`);
+      if(removed.length) changes.push(`첨부 삭제: ${removed.join(", ")}`);
+      const hist=(prev.edit_history||[]).concat([{ by:u.name, role:u.role, at:nowStamp(), changes: changes.length?changes.join(" / "):"변경 없음" }]);
+      ({ error } = await sb.from("materials").update({ title, body, attachments:_mtAtts, edit_history:hist }).eq("id",_mtEditId));
+    }else{
+      ({ error } = await sb.from("materials").insert([{ title, body, attachments:_mtAtts, by_name:u.name, by_role:u.role, by_login:u.login_id }]));
+    }
+    submit.disabled=false;
+    if(error){ console.error(error); toast(_mtEditId?"수정 실패":"등록 실패 — 권한을 확인하세요"); return; }
+    const wasEdit=_mtEditId;
+    _mtMode="list"; _mtEditId=null; _mtDraft={title:"",body:""};
+    await refresh(); toast(wasEdit?"자료가 수정되었습니다":"자료가 등록되었습니다");
+  };
+  voidActions("materials", _cache.materials, sec, async()=>{ _mtMode="list"; _mtOpenId=null; await refresh(); });
+}
+
+
+/* =========================================================
+   자유 결재선 기안 (일반 부서용) — gendraft
+========================================================= */
+let _gdMode = "list";     // list | write | view
+let _gdOpenId = null;
+let _gdApprovers = [];     // 작성 중 승인자 [{login,name,role}]
+let _gdReferees = [];      // 작성 중 참조자
+let _gdSub = "list";       // 하위탭: list | exec
+let _gdFilter = "전체";    // 집행 탭 상태필터
+let _gdListStatus = "전체"; // 목록 탭 상태필터
+let _gdVoidFilter = "live";
+
+// 현재 어느 단계에서 대기 중인지 텍스트
+function gdPendingText(d){
+  if(d.status==="완료") return "결재 완료";
+  if(d.status==="반려"){
+    const r=(d.approvers||[]).find(a=>a.result==="반려");
+    return r?`반려됨 (${r.name})`:"반려됨";
+  }
+  const aps=d.approvers||[]; const cur=aps[(d.cur_step||1)-1];
+  if(!cur) return "-";
+  const label = (d.cur_step>=aps.length)?"최종 승인 대기":`${d.cur_step}차 승인 대기`;
+  return `${label} — ${cur.name}`;
+}
+function gdStatusChip(s){
+  const m={ "상신":["#eef1f6","#52607a"], "진행":["#fff4e0","#b26a00"], "완료":["#e6f4ea","#2e7d32"], "반려":["#fdecea","#c0392b"] };
+  const c=m[s]||m["상신"]; return `<span style="background:${c[0]};color:${c[1]};padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700">${esc(s)}</span>`;
+}
+
+function genDraftSectionHtml(){
+  if(_gdMode==="write") return gdWriteHtml();
+  if(_gdMode==="view" && _gdOpenId) return gdViewHtml();
+  // 하위탭 (목록 / 집행)
+  const tabs=`<div class="seg" style="margin:8px 0 14px">
+    <button class="btn ${_gdSub==='list'?'btn-primary':'btn-ghost'} btn-sm" data-gd-sub="list">목록</button>
+    <button class="btn ${_gdSub==='exec'?'btn-primary':'btn-ghost'} btn-sm" data-gd-sub="exec">집행</button>
+  </div>`;
+  const body = _gdSub==="exec" ? gdExecHtml() : gdListHtml();
+  return `<div class="wrap-inner">${tabs}${body}</div>`;
+}
+
+function gdListHtml(){
+  let all=voidFilterApply(_cache.genDrafts||[], _gdVoidFilter);
+  const GD_COLS=[
+    {label:"제목", get:d=>d.title||""},
+    {label:"번호", get:d=>d.doc_no||""},
+    {label:"기안자", get:d=>d.by_name||""},
+    {label:"상태", get:d=>d.status||""},
+    {label:"진행단계", get:d=>gdPendingText(d)},
+    {label:"일자", get:d=>(d.created_at||"").slice(0,10)}
+  ];
+  all=searchApply("gendraft", all, GD_COLS);
+  const { rows:pageRows, cur, pages } = pageSlice("gendraft", all, 15);
+  const rows = pageRows.length ? pageRows.map(d=>`<tr data-gd-open="${d.id}" style="cursor:pointer;${d.void_status==='void'?'opacity:.55':''}">
+      <td style="white-space:nowrap">${(d.created_at||"").slice(0,10)}</td>
+      <td style="white-space:nowrap">${esc(d.doc_no||"")}</td>
+      <td class="bcard-title">${esc(d.title)} ${voidBadge(d)}</td>
+      <td style="white-space:nowrap">${esc(d.by_name||"")}</td>
+      <td class="col-gdstatus" style="white-space:nowrap">${gdStatusChip(d.status)}</td>
+      <td style="font-size:12px;color:var(--ink-soft)">${esc(gdPendingText(d))}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">등록된 기안이 없습니다.</td></tr>`;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="muted" style="font-size:13px">결재선 직접 지정 기안 (총 ${all.length}건)</div>
+      <button class="btn btn-primary btn-sm" id="gd-write">✍️ 글쓰기 (새 기안)</button>
+    </div>
+    ${filterBar2("gendraft","gd-search",_gdVoidFilter,"검색",GD_COLS)}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:96px">일자</th><th style="width:120px">번호</th><th>제목</th><th style="width:80px">기안자</th><th style="width:60px">상태</th><th style="width:170px">진행 단계</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+    ${pagerHtml("gendraft", cur, pages)}`;
+}
+
+function gdExecHtml(){
+  const all=_cache.genDrafts||[];
+  const filters=["전체","상신","진행","완료","반려"];
+  const list = _gdFilter==="전체" ? all : all.filter(d=>d.status===_gdFilter);
+  const cnt=(s)=> s==="전체"?all.length:all.filter(d=>d.status===s).length;
+  const fsel=`<div style="margin-bottom:12px;display:flex;align-items:center;gap:8px">
+      <label style="font-size:13px;color:var(--ink-soft)">상태</label>
+      <select id="gd-filter-sel" style="min-width:160px">${filters.map(f=>`<option value="${f}" ${_gdFilter===f?'selected':''}>${f} (${cnt(f)})</option>`).join("")}</select>
+    </div>`;
+  const rows = list.length ? list.map(d=>`<tr data-gd-open="${d.id}" style="cursor:pointer">
+      <td style="white-space:nowrap">${esc(d.doc_no||"")}</td>
+      <td class="bcard-title">${esc(d.title)}</td>
+      <td style="white-space:nowrap">${esc(d.by_name||"")}</td>
+      <td class="col-gdstatus" style="white-space:nowrap">${gdStatusChip(d.status)}</td>
+      <td style="font-size:12px;color:var(--ink-soft)">${esc(gdPendingText(d))}</td>
+    </tr>`).join("") : `<tr><td colspan="5" class="empty">해당 상태의 기안이 없습니다.</td></tr>`;
+  return `${fsel}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:130px">번호</th><th>제목</th><th style="width:80px">기안자</th><th style="width:60px">상태</th><th style="width:180px">진행 단계</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>`;
+}
+
+function gdWriteHtml(){
+  const accs=(_cache.accounts||[]).filter(a=>a.status==="활성");
+  const optList=accs.map(a=>`<option value="${esc(a.login_id)}">${esc(a.name)} (${esc(a.role)})</option>`).join("");
+  const apRows=_gdApprovers.map((a,i)=>`<div class="gd-line" style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span style="width:64px;font-weight:700;color:var(--brand)">${i+1==_gdApprovers.length?"최종":(i+1)+"차"}</span>
+      <span style="flex:1">${esc(a.name)} (${esc(a.role)})</span>
+      <button class="btn btn-ghost btn-sm" data-gd-apup="${i}" ${i==0?"disabled style=opacity:.3":""}>↑</button>
+      <button class="btn btn-ghost btn-sm" data-gd-apdn="${i}" ${i==_gdApprovers.length-1?"disabled style=opacity:.3":""}>↓</button>
+      <button class="btn btn-ghost btn-sm" data-gd-aprm="${i}" style="color:var(--void)">×</button>
+    </div>`).join("") || `<div class="muted" style="margin-bottom:6px">승인자를 추가하세요. (추가 순서대로 1차 → 최종)</div>`;
+  const rfRows=_gdReferees.map((r,i)=>`<span style="display:inline-flex;align-items:center;gap:4px;background:var(--line-soft);padding:3px 8px;border-radius:999px;margin:0 6px 6px 0">
+      ${esc(r.name)} (${esc(r.role)}) <button class="btn btn-ghost btn-sm" data-gd-rfrm="${i}" style="color:var(--void);padding:0 4px">×</button></span>`).join("") || `<span class="muted">참조자 없음</span>`;
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="gd-cancel" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="font-weight:700;font-size:15px;margin-bottom:12px">✍️ 새 기안 작성</div>
+      <div class="field"><label>제목</label><input type="text" id="gd-title" placeholder="기안 제목"></div>
+
+      <div style="margin:14px 0 6px;font-weight:700">✅ 승인선 <span class="muted" style="font-weight:400;font-size:12px">(추가 순서 = 결재 순서, 마지막이 최종승인)</span></div>
+      ${apRows}
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <select id="gd-ap-sel" style="flex:1">${optList}</select>
+        <button class="btn btn-ghost btn-sm" id="gd-ap-add">+ 승인자 추가</button>
+      </div>
+
+      <div style="margin:16px 0 6px;font-weight:700">👁 참조선 <span class="muted" style="font-weight:400;font-size:12px">(열람·참조만)</span></div>
+      <div>${rfRows}</div>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <select id="gd-rf-sel" style="flex:1">${optList}</select>
+        <button class="btn btn-ghost btn-sm" id="gd-rf-add">+ 참조자 추가</button>
+      </div>
+
+      <div class="field" style="margin-top:16px"><label>기안 내용</label>
+        <textarea id="gd-body" rows="10" placeholder="기안 내용을 자세히 작성하세요" style="width:100%;box-sizing:border-box;font-size:14px;line-height:1.7"></textarea></div>
+      <button class="btn btn-primary" id="gd-submit" style="width:100%;margin-top:8px">기안 상신</button>
+    </div>
+  </div>`;
+}
+
+function gdViewHtml(){
+  const u=currentUser();
+  const d=(_cache.genDrafts||[]).find(x=>x.id===_gdOpenId);
+  if(!d){ _gdMode="list"; return gdListHtml(); }
+  const gdCmts=(_cache.comments||[]).filter(c=>c.board==="gendraft" && c.ref_id===d.id);
+  const aps=d.approvers||[]; const rfs=d.referees||[];
+  const apHtml=aps.map((a,i)=>{
+    const isCur = d.status==="진행"||d.status==="상신" ? (i+1===d.cur_step) : false;
+    const resColor = a.result==="승인"?"#2e7d32":(a.result==="반려"?"#c0392b":"#52607a");
+    const resText = a.result || (isCur?"진행 중":"대기");
+    return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line-soft)">
+      <span style="width:56px;font-weight:700;color:var(--brand)">${i+1===aps.length?"최종":(i+1)+"차"}</span>
+      <span style="flex:1">${esc(a.name)} <span class="muted">(${esc(a.role)})</span></span>
+      <span style="color:${resColor};font-weight:700;font-size:13px">${esc(resText)}</span>
+      ${a.at?`<span class="muted" style="font-size:11px">${esc(a.at)}</span>`:""}
+    </div>`; }).join("");
+  // 현재 사용자가 이번 차례 승인자인지
+  const curAp = aps[d.cur_step-1];
+  const canAct = u && curAp && curAp.login===u.login_id && (d.status==="상신"||d.status==="진행");
+  const actBox = canAct ? `<div class="card" style="margin-top:12px;border:1px solid var(--brand)">
+      <div style="font-weight:700;margin-bottom:8px">내 결재 차례입니다 (${d.cur_step}${d.cur_step===aps.length?" · 최종":""})</div>
+      <div class="seg"><button class="btn btn-primary btn-sm" data-gd-approve="${d.id}">승인</button>
+        <button class="btn btn-ghost btn-sm" data-gd-reject="${d.id}" style="color:var(--void)">반려</button></div>
+    </div>` : "";
+  return `<div class="wrap-inner">
+    <button class="btn btn-ghost btn-sm" id="gd-back" style="margin-bottom:10px">← 목록</button>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+        <div style="font-weight:700;font-size:17px">${esc(d.title)} ${voidBadge(d)}</div>
+        <div style="flex:0 0 auto;display:flex;gap:4px">${voidButtonsHtml(d)}</div>
+      </div>
+      <div class="muted" style="font-size:12px;margin:4px 0 8px">${esc(d.doc_no||"")} · 기안자 ${esc(d.by_name||"")} (${esc(d.by_role||"")}) · ${(d.created_at||"").slice(0,10)}</div>
+      <div style="margin-bottom:12px">${gdStatusChip(d.status)} <span style="font-size:12.5px;color:var(--ink-soft);margin-left:6px">${esc(gdPendingText(d))}</span></div>
+      <div style="white-space:pre-wrap;font-size:14px;line-height:1.8;padding:12px;background:var(--line-soft);border-radius:8px">${esc(d.body||"")}</div>
+      ${voidHistoryHtml(d)}
+    </div>
+    <div class="card" style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:6px">✅ 승인선</div>
+      ${apHtml}
+      ${rfs.length?`<div style="font-weight:700;margin:12px 0 6px">👁 참조</div><div>${rfs.map(r=>`<span style="background:var(--line-soft);padding:3px 8px;border-radius:999px;margin:0 6px 6px 0;display:inline-block;font-size:12px">${esc(r.name)} (${esc(r.role)})</span>`).join("")}</div>`:""}
+    </div>
+    ${actBox}
+    <div class="card" style="margin-top:12px">
+      <div style="font-weight:700;margin-bottom:8px">💬 코멘트 ${gdCmts.length}</div>
+      ${ gdCmts.length ? gdCmts.map(c=>{
+        const canDelC = u && (u.login_id===c.by_login || u.role==="HTML마스터");
+        return `<div style="border-top:1px solid var(--line-soft);padding:8px 0">
+          <div style="display:flex;justify-content:space-between;gap:8px">
+            <span class="muted" style="font-size:12px">${esc(c.by_role||"")} ${esc(c.by_name||"")} · ${fmtStamp(c.created_at)}</span>
+            ${canDelC?`<button class="btn btn-ghost btn-sm" data-gdc-del="${c.id}" style="color:var(--void);padding:0 6px">×</button>`:""}
+          </div>
+          <div style="white-space:pre-wrap;font-size:13px;margin-top:2px">${esc(c.body||"")}</div>
+        </div>`; }).join("") : `<div class="muted" style="padding:8px 0">아직 코멘트가 없습니다.</div>` }
+      <div style="margin-top:12px">
+        <textarea id="gdc-body" rows="2" placeholder="코멘트를 입력하세요" style="width:100%;box-sizing:border-box"></textarea>
+        <button class="btn btn-primary btn-sm" id="gdc-add" style="margin-top:6px">코멘트 등록</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function wireGenDraftSection(){
+  const sec=document.getElementById("section-gendraft"); if(!sec) return;
+  const u=currentUser();
+  const rebuild=()=>{ buildSection("gendraft"); showTop("gendraft"); };
+  const refresh=async()=>{ await loadAllFromSupabase(); rebuild(); };
+
+  wirePager(sec, rebuild);
+  // 코멘트 등록
+  const gcadd=sec.querySelector("#gdc-add");
+  if(gcadd) gcadd.onclick=async()=>{
+    const body=sec.querySelector("#gdc-body").value.trim();
+    if(!body){ toast("코멘트를 입력하세요"); return; }
+    gcadd.disabled=true; gcadd.textContent="등록 중…";
+    const { error }=await sb.from("comments").insert([{ board:"gendraft", ref_id:_gdOpenId, post_id:null, body, by_name:u.name, by_role:u.role, by_login:u.login_id }]);
+    gcadd.disabled=false; gcadd.textContent="코멘트 등록";
+    if(error){ console.error(error); toast("등록 실패"); return; }
+    await refresh();
+  };
+  sec.querySelectorAll("[data-gdc-del]").forEach(b=>b.onclick=async()=>{
+    const { error }=await sb.from("comments").delete().eq("id",Number(b.dataset.gdcDel));
+    if(error){ console.error(error); toast("삭제 실패"); return; }
+    await refresh();
+  });
+  sec.querySelectorAll("[data-voidf]").forEach(b=>b.onclick=()=>{ _gdVoidFilter=b.dataset.voidf.split("|")[1]; _pgState["gendraft"]=1; rebuild(); });
+  wireFilterBar2(sec, "gendraft", "gd-search", ()=>{ _pgState["gendraft"]=1; rebuild(); }, (v)=>{ _gdVoidFilter=v; });
+  sec.querySelectorAll("[data-gd-sub]").forEach(b=>b.onclick=()=>{ _gdSub=b.dataset.gdSub; rebuild(); });
+  // 집행 상태필터
+  const gdfs=sec.querySelector("#gd-filter-sel"); if(gdfs) gdfs.onchange=()=>{ _gdFilter=gdfs.value; rebuild(); };
+
+  // 목록 → 새 기안
+  const w=sec.querySelector("#gd-write");
+  if(w) w.onclick=()=>{ _gdMode="write"; _gdApprovers=[]; _gdReferees=[]; rebuild(); };
+  const cancel=sec.querySelector("#gd-cancel");
+  if(cancel) cancel.onclick=()=>{ _gdMode="list"; rebuild(); };
+  const back=sec.querySelector("#gd-back");
+  if(back) back.onclick=()=>{ _gdMode="list"; _gdOpenId=null; rebuild(); };
+
+  // 목록 행 클릭
+  sec.querySelectorAll("[data-gd-open]").forEach(tr=>tr.onclick=()=>{ _gdOpenId=Number(tr.dataset.gdOpen); _gdMode="view"; rebuild(); });
+
+  // 승인자 추가/이동/삭제
+  const apAdd=sec.querySelector("#gd-ap-add");
+  if(apAdd) apAdd.onclick=()=>{
+    const login=sec.querySelector("#gd-ap-sel").value;
+    const a=(_cache.accounts||[]).find(x=>x.login_id===login);
+    if(!a) return;
+    if(_gdApprovers.some(x=>x.login===login)){ toast("이미 추가된 승인자입니다"); return; }
+    _gdApprovers.push({ login:a.login_id, name:a.name, role:a.role });
+    rebuild();
+  };
+  sec.querySelectorAll("[data-gd-apup]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.gdApup; if(i>0){ [_gdApprovers[i-1],_gdApprovers[i]]=[_gdApprovers[i],_gdApprovers[i-1]]; rebuild(); } });
+  sec.querySelectorAll("[data-gd-apdn]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.gdApdn; if(i<_gdApprovers.length-1){ [_gdApprovers[i+1],_gdApprovers[i]]=[_gdApprovers[i],_gdApprovers[i+1]]; rebuild(); } });
+  sec.querySelectorAll("[data-gd-aprm]").forEach(b=>b.onclick=()=>{ _gdApprovers.splice(+b.dataset.gdAprm,1); rebuild(); });
+
+  // 참조자 추가/삭제
+  const rfAdd=sec.querySelector("#gd-rf-add");
+  if(rfAdd) rfAdd.onclick=()=>{
+    const login=sec.querySelector("#gd-rf-sel").value;
+    const a=(_cache.accounts||[]).find(x=>x.login_id===login);
+    if(!a) return;
+    if(_gdReferees.some(x=>x.login===login)){ toast("이미 추가된 참조자입니다"); return; }
+    _gdReferees.push({ login:a.login_id, name:a.name, role:a.role });
+    rebuild();
+  };
+  sec.querySelectorAll("[data-gd-rfrm]").forEach(b=>b.onclick=()=>{ _gdReferees.splice(+b.dataset.gdRfrm,1); rebuild(); });
+
+  // 상신
+  const submit=sec.querySelector("#gd-submit");
+  if(submit) submit.onclick=async()=>{
+    const title=sec.querySelector("#gd-title").value.trim();
+    const body=sec.querySelector("#gd-body").value.trim();
+    if(!title){ toast("제목을 입력하세요"); return; }
+    if(!_gdApprovers.length){ toast("승인자를 1명 이상 지정하세요"); return; }
+    const yr=new Date().getFullYear();
+    const cnt=(_cache.genDrafts||[]).filter(d=>(d.doc_no||"").indexOf(`일반기안-${yr}-`)===0).length;
+    const doc_no=`일반기안-${yr}-${String(cnt+1).padStart(4,"0")}`;
+    const approvers=_gdApprovers.map((a,i)=>({ ...a, order:i+1, result:null, at:null }));
+    submit.disabled=true; submit.textContent="상신 중…";
+    const { error }=await sb.from("gen_drafts").insert([{
+      doc_no, title, body, approvers, referees:_gdReferees, cur_step:1, status:"상신",
+      by_name:u.name, by_role:u.role, by_login:u.login_id
+    }]);
+    submit.disabled=false; submit.textContent="기안 상신";
+    if(error){ console.error(error); toast("상신 실패"); return; }
+    _gdMode="list"; await refresh(); toast("기안이 상신되었습니다");
+  };
+
+  // 승인 / 반려
+  const apv=sec.querySelector("[data-gd-approve]");
+  if(apv) apv.onclick=async()=>{
+    const d=(_cache.genDrafts||[]).find(x=>x.id===Number(apv.dataset.gdApprove)); if(!d) return;
+    const aps=d.approvers||[]; const idx=d.cur_step-1;
+    if(!aps[idx] || aps[idx].login!==u.login_id){ toast("승인 권한이 없습니다"); return; }
+    aps[idx].result="승인"; aps[idx].at=nowStamp();
+    const isLast = d.cur_step>=aps.length;
+    const upd={ approvers:aps, cur_step: isLast?d.cur_step:d.cur_step+1, status: isLast?"완료":"진행" };
+    const { error }=await sb.from("gen_drafts").update(upd).eq("id",d.id);
+    if(error){ console.error(error); toast("저장 실패"); return; }
+    await refresh(); toast(isLast?"최종 승인 완료":"승인되었습니다 — 다음 결재자에게 전달");
+  };
+  const rej=sec.querySelector("[data-gd-reject]");
+  if(rej) rej.onclick=async()=>{
+    if(!confirm("이 기안을 반려할까요?")) return;
+    const d=(_cache.genDrafts||[]).find(x=>x.id===Number(rej.dataset.gdReject)); if(!d) return;
+    const aps=d.approvers||[]; const idx=d.cur_step-1;
+    if(!aps[idx] || aps[idx].login!==u.login_id){ toast("반려 권한이 없습니다"); return; }
+    aps[idx].result="반려"; aps[idx].at=nowStamp();
+    const { error }=await sb.from("gen_drafts").update({ approvers:aps, status:"반려" }).eq("id",d.id);
+    if(error){ console.error(error); toast("저장 실패"); return; }
+    await refresh(); toast("반려되었습니다");
+  };
+
+  // 폐기 (삭제 대체)
+  voidActions("gen_drafts", _cache.genDrafts, sec, async()=>{ _gdMode="list"; _gdOpenId=null; await refresh(); });
+}
+
+/* =========================================================
+   통합 결재함 (inbox) — 재무문서 + 일반기안
+========================================================= */
+let _inboxTab = "pending";
+let _inboxKind = "all";    // all|pr|draft|order|settle|urgent|gd|notice|request|material
+let _inboxStatus = "all";  // all | (각 상태)
+const FIN_MODULE_KEYS = ["pr","draft","order","settle","urgent"];
+function finIDecided(mkey, d, u){
+  if(!d || !u) return false;
+  const nameHit=(arr)=> (arr||[]).some(x=>x && (x.by===u.name));
+  if(mkey==="pr"){ if(d.approval && d.approval.by===u.name) return true; if(nameHit(d.references)) return true; }
+  if(mkey==="draft"){ const s=(typeof draftSeq==="function")?draftSeq(d):{}; if(s.fin&&s.fin.by===u.name) return true; if(s.chair&&s.chair.by===u.name) return true; if(nameHit(s.audits)) return true; }
+  if(mkey==="order"){ if(d.approval&&d.approval.by===u.name) return true; if(nameHit(d.comments)) return true; }
+  if(mkey==="settle"||mkey==="urgent"){ const s=(typeof settleSeq==="function")?settleSeq(d):{}; if(s.fin&&s.fin.by===u.name) return true; if(s.chair&&s.chair.by===u.name) return true; if(s.otp&&s.otp.by===u.name) return true; if(nameHit(s.audits)) return true; }
+  return false;
+}
+function gdMyApproval(d, u){ return (d.approvers||[]).find(a=>a.login===u.login_id) || null; }
+function gdMyTurn(d, u){
+  if(!d || d.void_status==="void") return false;
+  if(d.status!=="상신" && d.status!=="진행") return false;
+  const cur=(d.approvers||[])[(d.cur_step||1)-1];
+  return cur && cur.login===u.login_id;
+}
+function finStageText(mkey, d){
+  try{
+    if(mkey==="pr"){
+      if(d.status==="승인") return "승인 완료";
+      if(d.status==="반려") return "반려";
+      return "재무 승인 대기";
+    }
+    if(mkey==="draft" && typeof draftStage==="function"){
+      const st=draftStage(d);
+      return {"상신":"재무 승인 대기","위원장대기":"위원장 승인 대기","위원장승인":"최종 승인 완료","반려":"반려"}[st]||st;
+    }
+    if(mkey==="order"){
+      if(d.status==="반려") return "반려";
+      if(!d.received) return "입고 확인 대기";
+      if(!d.approval) return "재무 승인 대기";
+      return "승인 완료";
+    }
+    if((mkey==="settle"||mkey==="urgent") && typeof settleStage==="function"){
+      const st=settleStage(d);
+      return {"상신":"재무 승인 대기","위원장대기":"위원장 승인 대기","OTP대기":"재무분과장 최종승인 대기","확정":"최종 확정","반려":"반려"}[st]||st;
+    }
+  }catch(e){}
+  return d.status||"";
+}
+function collectInbox(mode, u){
+  const out=[];
+  FIN_MODULE_KEYS.forEach(mkey=>{
+    (loadRecsByKey(mkey)||[]).forEach(d=>{
+      if(d.status==="폐기") return;
+      const base={ kind:"fin", mkey, no:d.draft_no, title:d.title||"(제목 없음)", by:d.drafter||"", stage:finStageText(mkey,d), status:d.status, when:d.created_at||"" };
+      if(mode==="pending"){ if(isMyTurn(mkey,d,u)) out.push(base); }
+      else if(mode==="done"){ if(finIDecided(mkey,d,u)) out.push(base); }
+      else if(mode==="mine"){ if(isOwnDocByName(d,u)) out.push(base); }
+    });
+  });
+  (_cache.genDrafts||[]).forEach(d=>{
+    if(d.void_status==="void") return;
+    if(mode==="pending"){ if(gdMyTurn(d,u)) out.push({ kind:"gd", id:d.id, no:d.doc_no, title:d.title, by:d.by_name, stage:gdPendingText(d), status:d.status, when:d.created_at }); }
+    else if(mode==="done"){ const ap=gdMyApproval(d,u); if(ap&&ap.result) out.push({ kind:"gd", id:d.id, no:d.doc_no, title:d.title, by:d.by_name, stage:`내 결재: ${ap.result}`, status:d.status, when:d.created_at }); }
+    else if(mode==="mine"){ if(d.by_login===u.login_id) out.push({ kind:"gd", id:d.id, no:d.doc_no, title:d.title, by:d.by_name, stage:gdPendingText(d), status:d.status, when:d.created_at }); }
+  });
+  // 내가 올린 게시판 글 (공지·요청·자료) — '내가 올림'에만
+  if(mode==="mine"){
+    (_cache.notices||[]).forEach(n=>{ if(n.by_name===u.name && n.void_status!=="void") out.push({ kind:"notice", no:"공지", title:n.title, by:n.by_name, stage:"공지사항", status:"-", when:n.created_at }); });
+    (_cache.requests||[]).forEach(r=>{ if(r.by_login===u.login_id && r.void_status!=="void") out.push({ kind:"request", no:r.doc_no, title:r.title, by:r.by_name, stage:`대상: ${TARGET_LABEL[r.target]||"기타"} · ${r.status}`, status:r.status, when:r.created_at }); });
+    (_cache.materials||[]).forEach(m=>{ if(m.by_login===u.login_id && m.void_status!=="void") out.push({ kind:"material", no:"자료", title:m.title, by:m.by_name, stage:"중요자료", status:"-", when:m.created_at }); });
+  }
+  out.sort((a,b)=>String(b.when).localeCompare(String(a.when)));
+  return out;
+}
+function inboxCount(u){ if(!u) return 0; try{ return collectInbox("pending",u).length; }catch(e){ return 0; } }
+function inboxSectionHtml(){
+  const u=currentUser();
+  if(!u) return `<div class="wrap-inner"><div class="card"><div class="empty">로그인이 필요합니다.</div></div></div>`;
+  const tabsBtns=`<div class="seg" style="flex-wrap:wrap">
+    <button class="btn ${_inboxTab==='pending'?'btn-primary':'btn-ghost'} btn-sm" data-inbox-tab="pending">📥 결재 대기 (${collectInbox("pending",u).length})</button>
+    <button class="btn ${_inboxTab==='done'?'btn-primary':'btn-ghost'} btn-sm" data-inbox-tab="done">✅ 내가 결재함</button>
+    <button class="btn ${_inboxTab==='mine'?'btn-primary':'btn-ghost'} btn-sm" data-inbox-tab="mine">📤 내가 올림</button>
+  </div>`;
+  let list=collectInbox(_inboxTab, u);
+  // 구분 필터
+  const kindOpts=[["all","구분 전체"],["pr","구매요청"],["draft","기안"],["order","발주"],["settle","지출결의"],["urgent","긴급"],["gd","일반기안"],["notice","공지"],["request","요청"],["material","자료"]];
+  const kindOf=(r)=> r.kind==="fin" ? r.mkey : r.kind;
+  if(_inboxKind!=="all") list=list.filter(r=>kindOf(r)===_inboxKind);
+  // 상태 필터
+  const statusOpts=[["all","상태 전체"],["대기","승인 대기"],["완료","완료/확정"],["반려","반려"]];
+  if(_inboxStatus!=="all"){
+    list=list.filter(r=>{
+      const s=String(r.stage||"")+" "+String(r.status||"");
+      if(_inboxStatus==="대기") return s.includes("대기");
+      if(_inboxStatus==="완료") return s.includes("완료")||s.includes("확정");
+      if(_inboxStatus==="반려") return s.includes("반려");
+      return true;
+    });
+  }
+  // 검색 (제목·번호·기안자)
+  const INBOX_COLS=[
+    {label:"제목", get:r=>r.title||""},
+    {label:"구분", get:r=>{ const lm={gd:"일반기안",notice:"공지",request:"요청",material:"자료"}; return lm[r.kind]||((MODULES[r.mkey]||{}).label||r.mkey); }},
+    {label:"번호", get:r=>r.no||""},
+    {label:"기안자", get:r=>r.by||""},
+    {label:"현재단계", get:r=>r.stage||""},
+    {label:"일자", get:r=>String(r.when||"").slice(0,10)}
+  ];
+  const iq=(_listSearch["inbox"]||"").trim().toLowerCase();
+  if(iq){
+    const col=("inbox" in _searchCol)?_searchCol["inbox"]:"";
+    if(col){ const def=INBOX_COLS.find(c=>c.label===col); if(def) list=list.filter(r=>String(def.get(r)||"").toLowerCase().includes(iq)); }
+    else list=list.filter(r=>INBOX_COLS.map(c=>String(c.get(r)||"")).join(" ").toLowerCase().includes(iq));
+  }
+  // 검색바 (검색창 + 검색열) 한 줄
+  const curICol=("inbox" in _searchCol)?_searchCol["inbox"]:"";
+  const searchBar=`<div style="display:flex;gap:5px;flex-wrap:nowrap;align-items:center;margin-bottom:10px">
+    <input type="text" id="inbox-search" placeholder="검색" value="${esc(_listSearch['inbox']||'')}" style="flex:1 1 0;min-width:0;padding:8px 9px;border:1px solid var(--line);border-radius:8px;box-sizing:border-box">
+    <select id="inbox-search-col" style="flex:0 0 auto;width:82px;padding:8px 2px;font-size:12px">
+      <option value="" ${curICol===''?'selected':''}>전체</option>${INBOX_COLS.map(c=>`<option value="${c.label}" ${curICol===c.label?'selected':''}>${c.label}</option>`).join("")}
+    </select>
+  </div>`;
+  // 탭(좌) + 필터(우) 한 줄
+  const tabs=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 14px">
+    ${tabsBtns}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto">
+      <select id="inbox-kind" style="min-width:104px;font-size:12.5px">${kindOpts.map(([v,l])=>`<option value="${v}" ${_inboxKind===v?'selected':''}>${l}</option>`).join("")}</select>
+      <select id="inbox-status" style="min-width:104px;font-size:12.5px">${statusOpts.map(([v,l])=>`<option value="${v}" ${_inboxStatus===v?'selected':''}>${l}</option>`).join("")}</select>
+      <span class="muted" style="font-size:12px">${list.length}건</span>
+    </div>
+  </div>`;
+  const emptyMsg = _inboxTab==="pending" ? "지금 결재할 문서가 없습니다." : (_inboxTab==="done"?"결재한 문서가 없습니다.":"올린 문서가 없습니다.");
+  const rows = list.length ? list.map(r=>{
+    const labelMap={ gd:"일반기안", notice:"공지", request:"요청", material:"자료" };
+    const typeLabel = labelMap[r.kind] || ((MODULES[r.mkey]||{}).label||r.mkey);
+    let key;
+    if(r.kind==="gd") key=`gd|${r.id}`;
+    else if(r.kind==="notice") key=`notice`;
+    else if(r.kind==="request") key=`request|${r.id}`;
+    else if(r.kind==="material") key=`material|${r.id}`;
+    else key=`fin|${r.mkey}|${r.no}`;
+    return `<tr data-inbox-go="${esc(key)}" style="cursor:pointer">
+      <td style="white-space:nowrap"><span style="background:var(--line-soft);padding:2px 7px;border-radius:6px;font-size:11px;font-weight:700">${esc(typeLabel)}</span></td>
+      <td style="white-space:nowrap">${esc(r.no||"")}</td>
+      <td class="bcard-title">${esc(r.title||"")}</td>
+      <td style="white-space:nowrap">${esc(r.by||"")}</td>
+      <td style="font-size:12px;color:var(--ink-soft)">${esc(r.stage||"")}</td>
+      <td style="white-space:nowrap">${esc(String(r.when||"").slice(0,10))}</td>
+    </tr>`; }).join("") : `<tr><td colspan="6" class="empty">${emptyMsg}</td></tr>`;
+  return `<div class="wrap-inner">
+    <h2 style="margin:8px 0 4px">📥 내 결재함</h2>
+    <div class="muted" style="font-size:13px;margin-bottom:6px">재무문서와 일반기안을 한 곳에서 — 행을 클릭하면 해당 문서로 이동합니다.</div>
+    ${tabs}
+    ${searchBar}
+    <div class="card"><div style="overflow:auto"><table>
+      <thead><tr><th style="width:80px">구분</th><th style="width:120px">번호</th><th>제목</th><th style="width:80px">기안자</th><th style="width:160px">현재 단계</th><th style="width:96px">일자</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div></div>
+  </div>`;
+}
+function wireInboxSection(){
+  const sec=document.getElementById("section-inbox"); if(!sec) return;
+  sec.querySelectorAll("[data-inbox-tab]").forEach(b=>b.onclick=()=>{ _inboxTab=b.dataset.inboxTab; buildSection("inbox"); showTop("inbox"); });
+  const ik=sec.querySelector("#inbox-kind"); if(ik) ik.onchange=()=>{ _inboxKind=ik.value; buildSection("inbox"); showTop("inbox"); };
+  const ist=sec.querySelector("#inbox-status"); if(ist) ist.onchange=()=>{ _inboxStatus=ist.value; buildSection("inbox"); showTop("inbox"); };
+  const isr=sec.querySelector("#inbox-search"); if(isr) isr.oninput=()=>{ _listSearch["inbox"]=isr.value; const v=isr.value; buildSection("inbox"); showTop("inbox"); setTimeout(()=>{ const el=document.querySelector("#inbox-search"); if(el){ el.focus(); el.setSelectionRange(v.length,v.length); } },0); };
+  const isc=sec.querySelector("#inbox-search-col"); if(isc) isc.onchange=()=>{ _searchCol["inbox"]=isc.value; buildSection("inbox"); showTop("inbox"); };
+  sec.querySelectorAll("[data-inbox-go]").forEach(tr=>tr.onclick=()=>{
+    const parts=tr.dataset.inboxGo.split("|");
+    if(parts[0]==="gd"){
+      _gdOpenId=Number(parts[1]); _gdMode="view"; _gdSub="list";
+      showGroup("general"); showTop("gendraft");
+    }else if(parts[0]==="notice"){
+      _noticeWriting=false; showGroup("general"); showTop("notice");
+    }else if(parts[0]==="request"){
+      _rqOpenId=Number(parts[1]); _rqMode="view"; showGroup("general"); showTop("request");
+    }else if(parts[0]==="material"){
+      _mtOpenId=Number(parts[1]); _mtMode="view"; showGroup("general"); showTop("material");
+    }else{
+      const mkey=parts[1], no=parts[2]; const m=MODULES[mkey];
+      showGroup("finance"); showTop(mkey);
+      if(typeof openDetail==="function" && m) setTimeout(()=>openDetail(m,no), 50);
+    }
+  });
+}
+
 function buildSection(top){
   const root=document.getElementById("root");
   let sec=document.getElementById(`section-${top}`);
@@ -4946,6 +6520,15 @@ function buildSection(top){
     wireMySection();
     return sec;
   }
+  if(top==="inbox"){
+    if(sec) sec.remove();
+    sec=document.createElement("div");
+    sec.id="section-inbox";
+    sec.innerHTML=inboxSectionHtml();
+    root.appendChild(sec);
+    wireInboxSection();
+    return sec;
+  }
   if(top==="account"){
     if(sec) sec.remove();
     sec=document.createElement("div");
@@ -4953,6 +6536,33 @@ function buildSection(top){
     sec.innerHTML=accountSectionHtml();
     root.appendChild(sec);
     wireAccountSection();
+    return sec;
+  }
+  if(top==="notice"){
+    if(sec) sec.remove();
+    sec=document.createElement("div"); sec.id="section-notice";
+    sec.innerHTML=noticeSectionHtml(); root.appendChild(sec); wireNoticeSection();
+    return sec;
+  }
+  if(top==="request"){
+    if(sec) sec.remove();
+    sec=document.createElement("div"); sec.id="section-request";
+    sec.innerHTML=requestSectionHtml(); root.appendChild(sec); wireRequestSection();
+    return sec;
+  }
+  if(top==="material"){
+    if(sec) sec.remove();
+    sec=document.createElement("div"); sec.id="section-material";
+    sec.innerHTML=materialSectionHtml(); root.appendChild(sec); wireMaterialSection();
+    return sec;
+  }
+  if(top==="gendraft"){
+    if(sec) sec.remove();
+    sec=document.createElement("div");
+    sec.id="section-gendraft";
+    sec.innerHTML=genDraftSectionHtml();
+    root.appendChild(sec);
+    wireGenDraftSection();
     return sec;
   }
   if(top==="quote"){
@@ -5031,6 +6641,11 @@ function buildSection(top){
 }
 
 function showTop(top){
+  // 비로그인 상태에서는 계정(로그인) 화면만 허용
+  if(!currentUser() && top!=="account"){ top="account"; }
+  // 이 탭이 속한 그룹도 함께 활성화 (다른 그룹 탭으로 점프 시 동기화)
+  const btn=document.querySelector(`#topnav button[data-top="${top}"]`);
+  if(btn && btn.dataset.grp && typeof showGroup==="function") showGroup(btn.dataset.grp);
   document.querySelectorAll("#topnav button").forEach(b=>b.classList.toggle("active", b.dataset.top===top));
   // 모든 섹션 숨기고 대상만 표시
   document.querySelectorAll("#root > div[id^='section-']").forEach(s=>s.style.display="none");
@@ -5057,14 +6672,14 @@ function wireSection(m){
   const budAdd=document.getElementById(`${m.key}-budget-add`);
   if(budAdd) budAdd.onclick=()=>addBudgetLine(m);
   // 검색/필터
-  [`${m.key}-search`,`${m.key}-filter-status`,`${m.key}-filter-void`].forEach(id=>{
-    document.getElementById(id).addEventListener("input",()=>{ setPage(m.key,1); renderList(m); });
+  [`${m.key}-search`,`${m.key}-filter-col`,`${m.key}-filter-void`].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.addEventListener("input",()=>{ setPage(m.key,1); renderList(m); });
   });
   // 백업
-  document.querySelector(`[data-export="${m.key}"]`).onclick=()=>exportData(m);
+  const expBtn=document.querySelector(`[data-export="${m.key}"]`); if(expBtn) expBtn.onclick=()=>exportData(m);
   const fileEl=document.getElementById(`${m.key}-import-file`);
-  document.querySelector(`[data-import="${m.key}"]`).onclick=()=>fileEl.click();
-  fileEl.onchange=(e)=>{ const f=e.target.files[0]; if(f) importData(m,f); e.target.value=""; };
+  const impBtn=document.querySelector(`[data-import="${m.key}"]`); if(impBtn && fileEl) impBtn.onclick=()=>fileEl.click();
+  if(fileEl) fileEl.onchange=(e)=>{ const f=e.target.files[0]; if(f) importData(m,f); e.target.value=""; };
   // 폐기/승인/반려/취소/코멘트/기안생성/기안이동 (이벤트 위임)
   document.getElementById(`section-${m.key}`).addEventListener("click",(e)=>{
     const v=e.target.closest("[data-void]");
@@ -5124,15 +6739,44 @@ function wireSection(m){
   resetForm(m);
 }
 
+/* ---------- 그룹(2단 탭) ---------- */
+function showGroup(grp){
+  document.querySelectorAll("#topgroup button").forEach(b=>b.classList.toggle("active", b.dataset.group===grp));
+  document.querySelectorAll("#topnav button").forEach(b=>{
+    b.style.display = (b.dataset.grp===grp) ? "" : "none";
+  });
+}
+// 특정 탭이 속한 그룹을 반환
+function groupOf(top){
+  const btn=document.querySelector(`#topnav button[data-top="${top}"]`);
+  return btn ? btn.dataset.grp : "finance";
+}
+
 /* ---------- 부팅 ---------- */
+document.querySelectorAll("#topgroup button").forEach(b=>{
+  b.onclick=()=>{
+    showGroup(b.dataset.group);
+    // 그 그룹의 첫 번째 보이는 탭으로 이동
+    const first=document.querySelector(`#topnav button[data-grp="${b.dataset.group}"]`);
+    if(first) { showTop(first.dataset.top); refreshFromSupabase(false); }
+  };
+});
 document.querySelectorAll("#topnav button").forEach(b=>{
-  b.onclick=()=>{ showTop(b.dataset.top); refreshFromSupabase(false); };  // 탭 전환 시 백그라운드 최신화
+  b.onclick=()=>{
+    if(b.dataset.top==="notice"){ _noticeWriting=false; _noticeOpenId=null; }
+    if(b.dataset.top==="request"){ _rqMode="list"; _rqOpenId=null; _rqSub="list"; }
+    if(b.dataset.top==="material"){ _mtMode="list"; _mtOpenId=null; _mtEditId=null; }
+    if(b.dataset.top==="gendraft"){ _gdMode="list"; _gdOpenId=null; _gdSub="list"; }
+    showTop(b.dataset.top); refreshFromSupabase(false);
+  };
 });
 (async ()=>{
-  await sbRestoreSession();          // 기존 로그인 세션 복구 (있으면)
+  await sbRestoreSession();
   renderAuthBar();
   updateNavBadge();
-  showTop(currentUser() ? "my" : "account");
+  const startTop = currentUser() ? "pr" : "account";
+  showGroup(groupOf(startTop));
+  showTop(startTop);
 })();
 </script>
 </body>
